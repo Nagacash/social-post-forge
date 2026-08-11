@@ -2,12 +2,13 @@
 name: social-post-forge
 description: Turn any source (podcast audio, business description, article, URL, notes) into platform-native social posts for LinkedIn, Instagram, X/Threads and TikTok. Drafts natively per platform, scores against an 8-criterion rubric, runs a 33-pattern humanizer pass to strip AI writing tells, rewrites against the structure of currently-trending posts, produces image prompts, then publishes via copy-paste pack, self-hosted Postiz, or native platform APIs. Use for content repurposing, or standalone to audit and humanize an existing draft.
 version: 1.0.0
-author: Nagacash
+author: Maurice Holda (Naga Codex)
 license: MIT
 metadata:
   hermes:
     tags: [content, social-media, copywriting, marketing, humanizer, anti-slop, repurposing, linkedin, instagram, tiktok, publishing]
     homepage: https://github.com/Nagacash/social-post-forge
+    author_url: https://nagacodex.cloud
     related_skills: [humanizer, ghostwriter]
 ---
 

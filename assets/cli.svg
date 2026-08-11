@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="873" height="834" viewBox="0 0 873 834">
-<rect width="873" height="834" rx="8" fill="#0d1117"/>
-<path d="M0 8 a8 8 0 0 1 8 -8 h857 a8 8 0 0 1 8 8 v32 h-873 z" fill="#161b22"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="890" height="1086" viewBox="0 0 890 1086">
+<rect width="890" height="1086" rx="8" fill="#0d1117"/>
+<path d="M0 8 a8 8 0 0 1 8 -8 h874 a8 8 0 0 1 8 8 v32 h-890 z" fill="#161b22"/>
 <circle cx="22" cy="20" r="6" fill="#ff5f56"/>
 <circle cx="42" cy="20" r="6" fill="#ffbd2e"/>
 <circle cx="62" cy="20" r="6" fill="#27c93f"/>
-<text x="100" y="25" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12" fill="#6e7886">forge --source episode.txt</text>
+<text x="100" y="25" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12" fill="#6e7886">forge --source episode.txt --voice naga.yaml</text>
 <text x="40.8" y="89" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">social-post-</text>
 <text x="141.9" y="89" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#ff7a1a" xml:space="preserve">forge</text>
 <rect x="40.8" y="116.0" width="42.1" height="21" fill="#ffd76a"/>
@@ -44,50 +44,201 @@
 <text x="24.0" y="299" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">✓</text>
 <text x="40.8" y="299" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">1/5</text>
 <text x="74.5" y="299" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">INGEST</text>
-<text x="141.9" y="299" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">12 hard facts · 4 quotable moments</text>
+<text x="141.9" y="299" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">podcast · 48 min · 12 hard facts · 4 quotable moments</text>
 <text x="24.0" y="320" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">✓</text>
 <text x="40.8" y="320" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">2/5</text>
 <text x="74.5" y="320" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">DRAFT</text>
-<text x="133.5" y="320" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">linkedin · instagram · x · tiktok</text>
-<text x="24.0" y="341" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#ff7a1a" xml:space="preserve">◆</text>
+<text x="133.5" y="320" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">linkedin · instagram · x · tiktok   3 angles</text>
+<text x="24.0" y="341" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#ffbd2e" xml:space="preserve">▲</text>
 <text x="40.8" y="341" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">3/5</text>
-<text x="74.5" y="341" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#e8edf4" xml:space="preserve">CRITIQUE</text>
+<text x="74.5" y="341" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">CRITIQUE</text>
 <text x="158.7" y="341" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">rubric + tell detection</text>
-<rect x="24.0" y="378.0" width="16.8" height="1.3" fill="#f4511e"/>
-<text x="49.3" y="383" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#e8edf4" xml:space="preserve">LINKEDIN</text>
-<rect x="125.0" y="378.0" width="724.1" height="1.3" fill="#5f6a79"/>
-<text x="24.0" y="404" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#ff5f56" xml:space="preserve">✗</text>
-<text x="40.8" y="404" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#ff5f56" xml:space="preserve">rewrite needed</text>
-<text x="40.8" y="446" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">410 chars · 73 words · 4 paragraphs · 0 hashtags</text>
-<text x="40.8" y="488" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">hook          </text>
-<rect x="167.1" y="473.0" width="84.2" height="21" fill="#58c878"/>
-<text x="259.8" y="488" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">5/5</text>
-<text x="40.8" y="509" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">specificity   </text>
-<rect x="167.1" y="494.0" width="67.4" height="21" fill="#58c878"/>
-<rect x="234.5" y="497.0" width="16.8" height="14" rx="1" fill="#5f6a79" opacity="0.22"/>
-<text x="259.8" y="509" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">4/5</text>
-<text x="40.8" y="530" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">formatting    </text>
-<rect x="167.1" y="515.0" width="50.5" height="21" fill="#ffbd2e"/>
-<rect x="217.7" y="518.0" width="33.7" height="14" rx="1" fill="#5f6a79" opacity="0.22"/>
-<text x="259.8" y="530" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#ffbd2e" xml:space="preserve">3/5</text>
-<text x="285.0" y="530" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff5f56" xml:space="preserve">  below threshold</text>
-<text x="40.8" y="551" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">cta           </text>
-<rect x="167.1" y="536.0" width="67.4" height="21" fill="#58c878"/>
-<rect x="234.5" y="539.0" width="16.8" height="14" rx="1" fill="#5f6a79" opacity="0.22"/>
-<text x="259.8" y="551" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">4/5</text>
-<text x="40.8" y="593" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">specificity   </text>
-<text x="158.7" y="593" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">4 markers (2 numbers, 2 proper nouns, 0 dates)</text>
-<text x="40.8" y="614" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">named         </text>
-<text x="158.7" y="614" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#4a9eda" xml:space="preserve">Anja, Hamburg</text>
-<text x="40.8" y="656" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">hook          </text>
-<text x="158.7" y="656" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">We cut our onboarding from 40 minutes to 6.</text>
-<text x="158.7" y="677" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ number</text>
-<text x="242.9" y="677" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">· contrarian</text>
-<text x="360.8" y="677" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ stake</text>
-<text x="40.8" y="719" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ffbd2e" xml:space="preserve">·</text>
-<text x="57.7" y="719" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">Short for linkedin: 410 chars (target 1800-2800).</text>
-<text x="40.8" y="740" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ffbd2e" xml:space="preserve">·</text>
-<text x="57.7" y="740" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">0 hashtags; linkedin wants 1-3.</text>
-<text x="40.8" y="782" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">still needs a reader: </text>
-<text x="226.1" y="782" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">voice_authenticity, shareability, angle_discipline, anti_fabrication</text>
+<text x="74.5" y="362" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">linkedin  </text>
+<text x="167.1" y="362" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ pass (mechanical)</text>
+<text x="344.0" y="362" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">·</text>
+<text x="369.2" y="362" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">1 tell family</text>
+<text x="74.5" y="383" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">instagram </text>
+<text x="167.1" y="383" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ffbd2e" xml:space="preserve">✗ rewrite needed</text>
+<text x="318.7" y="383" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">·</text>
+<text x="344.0" y="383" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff5f56" xml:space="preserve">4 tell families</text>
+<text x="74.5" y="404" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">x         </text>
+<text x="167.1" y="404" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ pass (mechanical)</text>
+<text x="344.0" y="404" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">·</text>
+<text x="369.2" y="404" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">0 tell families</text>
+<text x="74.5" y="425" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">tiktok    </text>
+<text x="167.1" y="425" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ffbd2e" xml:space="preserve">✗ rewrite needed</text>
+<text x="318.7" y="425" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">·</text>
+<text x="344.0" y="425" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff5f56" xml:space="preserve">3 tell families</text>
+<text x="24.0" y="446" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">✓</text>
+<text x="40.8" y="446" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">4/5</text>
+<text x="74.5" y="446" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">HUMANIZE</text>
+<text x="158.7" y="446" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">33-pattern pass + audit</text>
+<text x="74.5" y="467" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">linkedin  </text>
+<text x="167.1" y="467" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ pass (mechanical)</text>
+<text x="344.0" y="467" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">·</text>
+<text x="369.2" y="467" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">0 tell families</text>
+<text x="74.5" y="488" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">instagram </text>
+<text x="167.1" y="488" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ pass (mechanical)</text>
+<text x="344.0" y="488" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">·</text>
+<text x="369.2" y="488" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">1 tell family</text>
+<text x="74.5" y="509" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">x         </text>
+<text x="167.1" y="509" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ pass (mechanical)</text>
+<text x="344.0" y="509" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">·</text>
+<text x="369.2" y="509" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">0 tell families</text>
+<text x="74.5" y="530" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">tiktok    </text>
+<text x="167.1" y="530" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ pass (mechanical)</text>
+<text x="344.0" y="530" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">·</text>
+<text x="369.2" y="530" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">0 tell families</text>
+<text x="24.0" y="551" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">✓</text>
+<text x="40.8" y="551" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">5/5</text>
+<text x="74.5" y="551" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">PACK</text>
+<text x="125.0" y="551" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">pack.json</text>
+<rect x="24.0" y="588.0" width="16.8" height="1.3" fill="#f4511e"/>
+<text x="49.3" y="593" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#e8edf4" xml:space="preserve">LINKEDIN</text>
+<rect x="125.0" y="588.0" width="724.1" height="1.3" fill="#5f6a79"/>
+<text x="24.0" y="614" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">✓</text>
+<text x="40.8" y="614" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">pass (mechanical)</text>
+<text x="40.8" y="656" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">2140 chars · 331 words · 9 paragraphs · 2 hashtags</text>
+<text x="40.8" y="698" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">hook          </text>
+<rect x="167.1" y="683.0" width="84.2" height="21" fill="#58c878"/>
+<text x="259.8" y="698" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">5/5</text>
+<text x="40.8" y="719" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">specificity   </text>
+<rect x="167.1" y="704.0" width="84.2" height="21" fill="#58c878"/>
+<text x="259.8" y="719" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">5/5</text>
+<text x="40.8" y="740" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">voice         </text>
+<rect x="167.1" y="725.0" width="67.4" height="21" fill="#58c878"/>
+<rect x="234.5" y="728.0" width="16.8" height="14" rx="1" fill="#5f6a79" opacity="0.22"/>
+<text x="259.8" y="740" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">4/5</text>
+<text x="40.8" y="761" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">formatting    </text>
+<rect x="167.1" y="746.0" width="84.2" height="21" fill="#58c878"/>
+<text x="259.8" y="761" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">5/5</text>
+<text x="40.8" y="782" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">cta           </text>
+<rect x="167.1" y="767.0" width="67.4" height="21" fill="#58c878"/>
+<rect x="234.5" y="770.0" width="16.8" height="14" rx="1" fill="#5f6a79" opacity="0.22"/>
+<text x="259.8" y="782" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#58c878" xml:space="preserve">4/5</text>
+<text x="40.8" y="824" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">specificity  </text>
+<text x="150.3" y="824" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">9 markers (4 numbers, 4 proper nouns, 1 date)</text>
+<text x="40.8" y="845" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">named        </text>
+<text x="150.3" y="845" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#4a9eda" xml:space="preserve">Anja, Hamburg, Figma, Postiz</text>
+<text x="40.8" y="887" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">hook         </text>
+<text x="150.3" y="887" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">We cut our onboarding from 40 minutes to 6.</text>
+<text x="150.3" y="908" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ number</text>
+<text x="234.5" y="908" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">· contrarian</text>
+<text x="352.4" y="908" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ stake</text>
+<rect x="24.0" y="945.0" width="8.4" height="2.0" fill="#ffd76a"/>
+<rect x="32.4" y="945.0" width="8.4" height="2.0" fill="#ffd568"/>
+<rect x="40.8" y="945.0" width="8.4" height="2.0" fill="#ffd366"/>
+<rect x="49.3" y="945.0" width="8.4" height="2.0" fill="#ffd164"/>
+<rect x="57.7" y="945.0" width="8.4" height="2.0" fill="#ffcf62"/>
+<rect x="66.1" y="945.0" width="8.4" height="2.0" fill="#ffce60"/>
+<rect x="74.5" y="945.0" width="8.4" height="2.0" fill="#ffcc5f"/>
+<rect x="82.9" y="945.0" width="8.4" height="2.0" fill="#ffca5d"/>
+<rect x="91.4" y="945.0" width="8.4" height="2.0" fill="#ffc85b"/>
+<rect x="99.8" y="945.0" width="8.4" height="2.0" fill="#ffc759"/>
+<rect x="108.2" y="945.0" width="8.4" height="2.0" fill="#ffc557"/>
+<rect x="116.6" y="945.0" width="8.4" height="2.0" fill="#ffc356"/>
+<rect x="125.0" y="945.0" width="8.4" height="2.0" fill="#ffc154"/>
+<rect x="133.5" y="945.0" width="8.4" height="2.0" fill="#ffbf52"/>
+<rect x="141.9" y="945.0" width="8.4" height="2.0" fill="#ffbe50"/>
+<rect x="150.3" y="945.0" width="8.4" height="2.0" fill="#ffbc4e"/>
+<rect x="158.7" y="945.0" width="8.4" height="2.0" fill="#ffba4c"/>
+<rect x="167.1" y="945.0" width="8.4" height="2.0" fill="#ffb84b"/>
+<rect x="175.6" y="945.0" width="8.4" height="2.0" fill="#ffb749"/>
+<rect x="184.0" y="945.0" width="8.4" height="2.0" fill="#ffb547"/>
+<rect x="192.4" y="945.0" width="8.4" height="2.0" fill="#ffb345"/>
+<rect x="200.8" y="945.0" width="8.4" height="2.0" fill="#ffb143"/>
+<rect x="209.2" y="945.0" width="8.4" height="2.0" fill="#ffaf42"/>
+<rect x="217.7" y="945.0" width="8.4" height="2.0" fill="#ffae40"/>
+<rect x="226.1" y="945.0" width="8.4" height="2.0" fill="#ffac3e"/>
+<rect x="234.5" y="945.0" width="8.4" height="2.0" fill="#ffaa3c"/>
+<rect x="242.9" y="945.0" width="8.4" height="2.0" fill="#ffa83b"/>
+<rect x="251.3" y="945.0" width="8.4" height="2.0" fill="#ffa639"/>
+<rect x="259.8" y="945.0" width="8.4" height="2.0" fill="#ffa438"/>
+<rect x="268.2" y="945.0" width="8.4" height="2.0" fill="#ffa236"/>
+<rect x="276.6" y="945.0" width="8.4" height="2.0" fill="#ffa035"/>
+<rect x="285.0" y="945.0" width="8.4" height="2.0" fill="#ff9e34"/>
+<rect x="293.4" y="945.0" width="8.4" height="2.0" fill="#ff9c32"/>
+<rect x="301.9" y="945.0" width="8.4" height="2.0" fill="#ff9a31"/>
+<rect x="310.3" y="945.0" width="8.4" height="2.0" fill="#ff982f"/>
+<rect x="318.7" y="945.0" width="8.4" height="2.0" fill="#ff962e"/>
+<rect x="327.1" y="945.0" width="8.4" height="2.0" fill="#ff942d"/>
+<rect x="335.5" y="945.0" width="8.4" height="2.0" fill="#ff922b"/>
+<rect x="344.0" y="945.0" width="8.4" height="2.0" fill="#ff902a"/>
+<rect x="352.4" y="945.0" width="8.4" height="2.0" fill="#ff8e28"/>
+<rect x="360.8" y="945.0" width="8.4" height="2.0" fill="#ff8c27"/>
+<rect x="369.2" y="945.0" width="8.4" height="2.0" fill="#ff8a26"/>
+<rect x="377.6" y="945.0" width="8.4" height="2.0" fill="#ff8824"/>
+<rect x="386.1" y="945.0" width="8.4" height="2.0" fill="#ff8623"/>
+<rect x="394.5" y="945.0" width="8.4" height="2.0" fill="#ff8421"/>
+<rect x="402.9" y="945.0" width="8.4" height="2.0" fill="#ff8220"/>
+<rect x="411.3" y="945.0" width="8.4" height="2.0" fill="#ff801e"/>
+<rect x="419.7" y="945.0" width="8.4" height="2.0" fill="#ff7e1d"/>
+<rect x="428.2" y="945.0" width="8.4" height="2.0" fill="#ff7c1c"/>
+<rect x="436.6" y="945.0" width="8.4" height="2.0" fill="#ff7a1a"/>
+<rect x="445.0" y="945.0" width="8.4" height="2.0" fill="#fe791a"/>
+<rect x="453.4" y="945.0" width="8.4" height="2.0" fill="#fe771a"/>
+<rect x="461.8" y="945.0" width="8.4" height="2.0" fill="#fd751a"/>
+<rect x="470.3" y="945.0" width="8.4" height="2.0" fill="#fd741a"/>
+<rect x="478.7" y="945.0" width="8.4" height="2.0" fill="#fd721a"/>
+<rect x="487.1" y="945.0" width="8.4" height="2.0" fill="#fc701a"/>
+<rect x="495.5" y="945.0" width="8.4" height="2.0" fill="#fc6f1b"/>
+<rect x="503.9" y="945.0" width="8.4" height="2.0" fill="#fb6d1b"/>
+<rect x="512.4" y="945.0" width="8.4" height="2.0" fill="#fb6b1b"/>
+<rect x="520.8" y="945.0" width="8.4" height="2.0" fill="#fa6a1b"/>
+<rect x="529.2" y="945.0" width="8.4" height="2.0" fill="#fa681b"/>
+<rect x="537.6" y="945.0" width="8.4" height="2.0" fill="#f9661b"/>
+<rect x="546.0" y="945.0" width="8.4" height="2.0" fill="#f9651c"/>
+<rect x="554.5" y="945.0" width="8.4" height="2.0" fill="#f9631c"/>
+<rect x="562.9" y="945.0" width="8.4" height="2.0" fill="#f8611c"/>
+<rect x="571.3" y="945.0" width="8.4" height="2.0" fill="#f8601c"/>
+<rect x="579.7" y="945.0" width="8.4" height="2.0" fill="#f75e1c"/>
+<rect x="588.1" y="945.0" width="8.4" height="2.0" fill="#f75d1c"/>
+<rect x="596.6" y="945.0" width="8.4" height="2.0" fill="#f65b1c"/>
+<rect x="605.0" y="945.0" width="8.4" height="2.0" fill="#f6591d"/>
+<rect x="613.4" y="945.0" width="8.4" height="2.0" fill="#f5581d"/>
+<rect x="621.8" y="945.0" width="8.4" height="2.0" fill="#f5561d"/>
+<rect x="630.2" y="945.0" width="8.4" height="2.0" fill="#f5541d"/>
+<rect x="638.7" y="945.0" width="8.4" height="2.0" fill="#f4531d"/>
+<rect x="647.1" y="945.0" width="8.4" height="2.0" fill="#f4511d"/>
+<rect x="655.5" y="945.0" width="8.4" height="2.0" fill="#f24f1e"/>
+<rect x="663.9" y="945.0" width="8.4" height="2.0" fill="#f14e1e"/>
+<rect x="672.3" y="945.0" width="8.4" height="2.0" fill="#ef4c1f"/>
+<rect x="680.8" y="945.0" width="8.4" height="2.0" fill="#ed4b1f"/>
+<rect x="689.2" y="945.0" width="8.4" height="2.0" fill="#ec4920"/>
+<rect x="697.6" y="945.0" width="8.4" height="2.0" fill="#ea4720"/>
+<rect x="706.0" y="945.0" width="8.4" height="2.0" fill="#e84621"/>
+<rect x="714.4" y="945.0" width="8.4" height="2.0" fill="#e74421"/>
+<rect x="722.9" y="945.0" width="8.4" height="2.0" fill="#e54322"/>
+<rect x="731.3" y="945.0" width="8.4" height="2.0" fill="#e34122"/>
+<rect x="739.7" y="945.0" width="8.4" height="2.0" fill="#e24023"/>
+<rect x="748.1" y="945.0" width="8.4" height="2.0" fill="#e03e23"/>
+<rect x="756.5" y="945.0" width="8.4" height="2.0" fill="#de3c24"/>
+<rect x="765.0" y="945.0" width="8.4" height="2.0" fill="#dd3b24"/>
+<rect x="773.4" y="945.0" width="8.4" height="2.0" fill="#db3925"/>
+<rect x="781.8" y="945.0" width="8.4" height="2.0" fill="#d93825"/>
+<rect x="790.2" y="945.0" width="8.4" height="2.0" fill="#d83626"/>
+<rect x="798.6" y="945.0" width="8.4" height="2.0" fill="#d63526"/>
+<rect x="807.1" y="945.0" width="8.4" height="2.0" fill="#d43327"/>
+<rect x="815.5" y="945.0" width="8.4" height="2.0" fill="#d33127"/>
+<rect x="823.9" y="945.0" width="8.4" height="2.0" fill="#d13028"/>
+<rect x="832.3" y="945.0" width="8.4" height="2.0" fill="#cf2e28"/>
+<rect x="840.7" y="945.0" width="8.4" height="2.0" fill="#ce2d29"/>
+<rect x="849.2" y="945.0" width="8.4" height="2.0" fill="#cc2b29"/>
+<rect x="857.6" y="945.0" width="8.4" height="2.0" fill="#cb2a2a"/>
+<text x="24.0" y="971" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">┌</text>
+<rect x="32.4" y="966.0" width="8.4" height="1.3" fill="#ff7a1a"/>
+<text x="40.8" y="971" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" font-weight="700" fill="#e8edf4" xml:space="preserve"> PACK · pack.json </text>
+<rect x="192.4" y="966.0" width="665.2" height="1.3" fill="#ff7a1a"/>
+<text x="857.6" y="971" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">┐</text>
+<text x="24.0" y="992" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">│</text>
+<text x="57.7" y="992" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#e8edf4" xml:space="preserve">4 posts</text>
+<text x="116.6" y="992" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#8b95a5" xml:space="preserve">   3 angles · 4 image prompts · 1 carousel · 1 script</text>
+<text x="857.6" y="992" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">│</text>
+<text x="24.0" y="1013" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">│</text>
+<text x="57.7" y="1013" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#58c878" xml:space="preserve">✓ ready to paste</text>
+<text x="192.4" y="1013" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79" xml:space="preserve">      publish: --pack pack.json --when now</text>
+<text x="857.6" y="1013" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">│</text>
+<text x="24.0" y="1034" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">└</text>
+<rect x="32.4" y="1029.0" width="825.2" height="1.3" fill="#ff7a1a"/>
+<text x="857.6" y="1034" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#ff7a1a" xml:space="preserve">┘</text>
 </svg>

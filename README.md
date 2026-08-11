@@ -6,6 +6,8 @@ An agent skill that turns any source — a podcast episode, a business descripti
 
 Plain Markdown plus Python. No workflow builder, no monthly SaaS, no webhook plumbing.
 
+Built by **Maurice Holda** at **[Naga Codex](https://nagacodex.cloud)**.
+
 <img src="assets/pipeline.svg" alt="The six-stage pipeline" width="100%">
 
 ```
@@ -168,6 +170,12 @@ See `examples/voice-profile.example.yaml`.
 - [Postiz](https://github.com/gitroomhq/postiz-app) (AGPL-3.0) — the self-hosted publishing bridge
 - Pipeline ideas from `alankritxghosh/william.ai`, `pauxiel/linkedin-ghost-writer`, `rayane-rhsn/autopost-ai` and Akamai's multi-agent social transform example
 
+## Built by
+
+**[Naga Codex](https://nagacodex.cloud)** — Maurice Holda. We build AI systems for people who need them to work in production, not in a demo.
+
+If you use this and it helps, or it breaks, open an issue. Both are useful.
+
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). Use it commercially, fork it, strip the branding — that is the point of the licence.
