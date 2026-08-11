@@ -290,7 +290,7 @@ Write prompts with specific visual nouns, not concepts. "AI automation" is not a
 
 Match format to platform: 4:5 for Instagram feed, 9:16 for Reels/TikTok covers and Stories, 1.91:1 for LinkedIn link posts, 16:9 for X.
 
-Then **ask the user**: generate the image now, or keep the prompt? Image generation is available in this environment, so this is a real offer, not a placeholder. If yes:
+Then **ask the user**: generate the image now, or keep the prompt? Only make the offer if your harness actually has image generation (see the capability table above) — on Hyperagent it does, on a stock Claude Code install it does not. Where it is unavailable, hand over the prompt and say so rather than promising an image you cannot produce. If it is available:
 
 ```
 GenerateImage({ prompt, aspectRatio: "4:5", title: "IG post — <topic>" })
