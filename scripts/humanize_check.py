@@ -500,12 +500,17 @@ def main():
             head = items[0]
             loc = " (line %s)" % head["line"] if "line" in head else ""
             print("  [%s] %s x%d%s" % (head.get("pattern"), label, len(items), loc))
+            seen_suggestions = set()
             for it in items[:3]:
                 shown = it.get("found") or it.get("context") or it.get("note", "")
                 if shown:
                     print("      %s" % str(shown)[:100])
-                if "suggest" in it:
-                    print("      -> %s" % it["suggest"])
+                sug = it.get("suggest")
+                # One vocabulary hit has its own replacement; a structural
+                # pattern repeats the same advice, so say it once.
+                if sug and sug not in seen_suggestions:
+                    print("      -> %s" % sug)
+                    seen_suggestions.add(sug)
             if len(items) > 3:
                 print("      ... %d more" % (len(items) - 3))
 
