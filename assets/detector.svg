@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="546" viewBox="0 0 1100 546">
+<rect width="1100" height="546" rx="8" fill="#0d1117"/>
+<path d="M0 8 a8 8 0 0 1 8 -8 h1084 a8 8 0 0 1 8 8 v32 h-1100 z" fill="#161b22"/>
+<circle cx="22" cy="20" r="6" fill="#ff5f56"/>
+<circle cx="42" cy="20" r="6" fill="#ffbd2e"/>
+<circle cx="62" cy="20" r="6" fill="#27c93f"/>
+<text x="100" y="25" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12" fill="#6e7886">humanize_check.py — draft.txt</text>
+<text x="26" y="62" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="700" fill="#ff6b6b" xml:space="preserve">verdict: reads as machine-written — rewrite</text>
+<text x="26" y="83" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#ffbd2e" xml:space="preserve">pattern families hit: 12   total findings: 24</text>
+<text x="26" y="104" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#96a0af" xml:space="preserve">sentence rhythm: 7 sentences, mean 13.0 words, stdev 6.1</text>
+<text x="26" y="125" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="700" fill="#e8edf4" xml:space="preserve">findings:</text>
+<text x="26" y="146" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#78c8ff" xml:space="preserve">  [7] AI vocabulary x11 (line 5)</text>
+<text x="26" y="167" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      delve</text>
+<text x="26" y="188" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#58c878" xml:space="preserve">      -&gt; look at, dig into</text>
+<text x="26" y="209" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      leverage</text>
+<text x="26" y="230" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#58c878" xml:space="preserve">      -&gt; use</text>
+<text x="26" y="251" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      foster</text>
+<text x="26" y="272" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#58c878" xml:space="preserve">      -&gt; build, encourage</text>
+<text x="26" y="293" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      ... 8 more</text>
+<text x="26" y="314" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#78c8ff" xml:space="preserve">  [16] inline-header list x3 (line 6)</text>
+<text x="26" y="335" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      - **Speed:** f</text>
+<text x="26" y="356" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#58c878" xml:space="preserve">      -&gt; Convert to prose. This is the most recognisable &#x27;AI wrote my post&#x27; shape.</text>
+<text x="26" y="377" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      - **Quality:** b</text>
+<text x="26" y="398" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      - **Scale:** m</text>
+<text x="26" y="419" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#78c8ff" xml:space="preserve">  [14] em dash x1 (line 5)</text>
+<text x="26" y="440" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      tion foster deeper engagement — enhancing their competitive </text>
+<text x="26" y="461" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#58c878" xml:space="preserve">      -&gt; Restructure: period, comma, colon, parentheses. Swapping in a hyphen leaves the tell intact.</text>
+<text x="26" y="482" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#78c8ff" xml:space="preserve">  [3] -ing pseudo-analysis x1 (line 5)</text>
+<text x="26" y="503" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12.5" font-weight="400" fill="#c8d0da" xml:space="preserve">      underscoring</text>
+</svg>

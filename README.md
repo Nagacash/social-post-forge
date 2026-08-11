@@ -1,8 +1,12 @@
+<img src="assets/hero.svg" alt="social-post-forge" width="100%">
+
 # social-post-forge
 
 An agent skill that turns any source — a podcast episode, a business description, an article, a pile of notes — into platform-native social posts for LinkedIn, Instagram, X/Threads and TikTok. Every draft gets scored against a rubric, stripped of AI writing tells, rewritten against what is currently working in the niche, paired with an image prompt, and then either handed over as a copy-paste pack or published automatically.
 
 Plain Markdown plus Python. No workflow builder, no monthly SaaS, no webhook plumbing.
+
+<img src="assets/pipeline.svg" alt="The six-stage pipeline" width="100%">
 
 ```
 1. INGEST      source material  →  source brief + voice profile
@@ -94,22 +98,7 @@ The insight underneath all 33 patterns, in Wikipedia's words:
 
 `scripts/humanize_check.py` detects the mechanically findable subset — dashes, invisible unicode, the AI vocabulary cluster, negative parallelism, rule-of-three runs, filler, signposting, aphorism formulas, inline-header lists, hedge stacks, staccato runs and sentence-length uniformity. It scores by **pattern families hit**, not raw count, because clusters are what matter and a single em dash is nothing.
 
-```
-$ python3 scripts/humanize_check.py --file draft.txt
-verdict: reads as machine-written — rewrite
-pattern families hit: 11   total findings: 21
-
-sentence rhythm: 7 sentences, mean 13.0 words, stdev 6.1
-
-findings:
-  [7] AI vocabulary x11 (line 5)
-      delve
-      -> look at, dig into
-  [9] negative parallelism x1 (line 3)
-      it's not just
-  [16] inline-header list x3 (line 6)
-      -> Convert to prose. This is the most recognisable 'AI wrote my post' shape.
-```
+<img src="assets/detector.svg" alt="humanize_check.py output" width="100%">
 
 Three rules keep the pass honest:
 
@@ -152,6 +141,7 @@ scripts/
   publish_native.py                   direct platform APIs
 examples/
   voice-profile.example.yaml          the schema, filled in
+assets/                               README imagery
 ```
 
 ## The voice profile

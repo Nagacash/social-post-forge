@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340">
+<rect width="1200" height="340" fill="#0b0f14"/>
+<rect x="700" y="52" width="300" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="82" width="254" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="112" width="208" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="142" width="300" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="172" width="254" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="202" width="208" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="232" width="300" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="262" width="254" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="292" width="208" height="7" rx="3.5" fill="#1b2430"/>
+<rect x="700" y="54" width="300" height="2.5" rx="1.25" fill="#cb2a2a" opacity="0.85"/>
+<rect x="700" y="144" width="208" height="2.5" rx="1.25" fill="#cb2a2a" opacity="0.85"/>
+<rect x="700" y="234" width="254" height="2.5" rx="1.25" fill="#cb2a2a" opacity="0.85"/>
+<rect x="1035" y="112" width="130" height="118" rx="8" fill="#141b24" stroke="#2d3948"/>
+<rect x="1053" y="134" width="92" height="7" rx="3.5" fill="#3a4655"/>
+<rect x="1053" y="156" width="74" height="7" rx="3.5" fill="#3a4655"/>
+<rect x="1053" y="178" width="84" height="7" rx="3.5" fill="#3a4655"/>
+<rect x="1053" y="200" width="40" height="7" rx="3.5" fill="#4a9eda"/>
+<path d="M 995 171 l 24 0 m -7 -6 l 7 6 l -7 6" stroke="#5f6a79" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="64" y="132" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="46" font-weight="700" fill="#e8edf4">social-post-forge</text>
+<rect x="64" y="158" width="62" height="4" fill="#cb2a2a"/>
+<text x="64" y="204" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Helvetica,Arial,sans-serif" font-size="19" fill="#8b95a5">Source in. Posts out. Scored, humanized and</text>
+<text x="64" y="232" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Helvetica,Arial,sans-serif" font-size="19" fill="#8b95a5">benchmarked before they ship.</text>
+<text x="64" y="278" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79">LinkedIn · Instagram · X · TikTok</text>
+<text x="64" y="300" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14" fill="#5f6a79">MIT · no dependencies</text>
+</svg>
