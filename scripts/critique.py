@@ -15,8 +15,15 @@ Usage:
 
 import argparse
 import json
+import os
 import re
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    import ui
+except ImportError:  # ui.py is optional; fall back to plain text
+    ui = None
 
 PLATFORMS = {
     "linkedin": {
@@ -272,42 +279,85 @@ def score(text, platform):
 
 
 def report(res):
-    print("=" * 60)
-    print("%s — %s" % (res["platform"].upper(), res["verdict"]))
-    print("=" * 60)
     p = res["platform_check"]
-    print("%d chars, %d words, %d paragraphs, %d hashtags"
-          % (p["chars"], p["words"], p["paragraphs"], len(p["hashtags"])))
+    ok = not res["failing_criteria"]
 
-    print("\nmechanical scores:")
-    for k, v in res["mechanical_scores"].items():
-        print("  %-14s %d/5 %s" % (k, v, "" if v >= 4 else "  <-- below threshold"))
+    if ui is None:
+        print("=" * 60)
+        print("%s — %s" % (res["platform"].upper(), res["verdict"]))
+        print("=" * 60)
+        print("%d chars, %d words, %d paragraphs, %d hashtags"
+              % (p["chars"], p["words"], p["paragraphs"], len(p["hashtags"])))
+        print("\nmechanical scores:")
+        for k, v in res["mechanical_scores"].items():
+            print("  %-14s %d/5 %s" % (k, v, "" if v >= 4 else "  <-- below threshold"))
+    else:
+        print()
+        print(ui.rule(res["platform"].upper()))
+        print(ui.verdict(res["verdict"], ok=ok))
+        print()
+        print("  " + ui.c("%d chars · %d words · %d paragraphs · %d hashtags"
+                          % (p["chars"], p["words"], p["paragraphs"],
+                             len(p["hashtags"])), ui.MUTED))
+        print()
+        for k, v in res["mechanical_scores"].items():
+            print(ui.score_bar(k, v))
 
-    s = res["specificity"]
-    print("\nspecificity: %d markers (%d numbers, %d proper nouns, %d dates)"
-          % (s["total"], s["numbers"], s["proper_nouns"], s["dates"]))
-    if s["examples"]:
-        print("  named: %s" % ", ".join(s["examples"]))
-    if s["total"] < 3:
-        print("  ! Under 3 specific details. Cannot score above 3 on Specificity.")
+    s_ = res["specificity"]
+    spec = ("%d markers (%d numbers, %d proper nouns, %d dates)"
+            % (s_["total"], s_["numbers"], s_["proper_nouns"], s_["dates"]))
+    if ui is None:
+        print("\nspecificity: " + spec)
+        if s_["examples"]:
+            print("  named: %s" % ", ".join(s_["examples"]))
+        if s_["total"] < 3:
+            print("  ! Under 3 specific details. Cannot score above 3 on Specificity.")
+    else:
+        print()
+        print("  " + ui.c("specificity".ljust(14), ui.FAINT) + ui.c(spec, ui.MUTED))
+        if s_["examples"]:
+            print("  " + ui.c("named".ljust(14), ui.FAINT)
+                  + ui.c(", ".join(s_["examples"]), ui.COOL))
+        if s_["total"] < 3:
+            print("  %s %s" % (ui.c("▲", ui.WARN), ui.c(
+                "Under 3 specific details. Cannot score above 3 on Specificity.",
+                ui.WARN)))
 
     h = res["hook_check"]
-    print("\nhook: %s" % h["first_line"])
-    print("  number:%s contrarian:%s stake:%s"
-          % (h["has_number"], h["has_contrarian"], h["has_personal_stake"]))
-    for i in h["issues"]:
-        print("  ! %s" % i)
+    signals = [("number", h["has_number"]), ("contrarian", h["has_contrarian"]),
+               ("stake", h["has_personal_stake"])]
+    if ui is None:
+        print("\nhook: %s" % h["first_line"])
+        print("  " + " ".join("%s:%s" % (n, v) for n, v in signals))
+        for i in h["issues"]:
+            print("  ! %s" % i)
+    else:
+        print()
+        print("  " + ui.c("hook".ljust(14), ui.FAINT) + ui.c(h["first_line"], ui.INK))
+        marks = "  ".join(
+            ui.c("%s %s" % ("✓" if v else "·", n), ui.GOOD if v else ui.FAINT)
+            for n, v in signals)
+        print("  " + " " * 14 + marks)
+        for i in h["issues"]:
+            print("  %s %s" % (ui.c("▲", ui.WARN), ui.c(i, ui.WARN)))
 
     if p["issues"]:
-        print("\nissues:")
+        print("\nissues:" if ui is None else "")
         for i in p["issues"]:
-            print("  ! %s" % i)
+            print("  ! %s" % i if ui is None
+                  else "  %s %s" % (ui.c("✗", ui.BAD), ui.c(i, ui.BAD)))
     if p["warnings"]:
-        print("\nwarnings:")
+        print("\nwarnings:" if ui is None else "")
         for w in p["warnings"]:
-            print("  - %s" % w)
+            print("  - %s" % w if ui is None
+                  else "  %s %s" % (ui.c("·", ui.WARN), ui.c(w, ui.MUTED)))
 
-    print("\nstill needs a reader: %s" % ", ".join(res["needs_human_scoring"]))
+    pending = ", ".join(res["needs_human_scoring"])
+    if ui is None:
+        print("\nstill needs a reader: %s" % pending)
+    else:
+        print()
+        print("  " + ui.c("still needs a reader: ", ui.FAINT) + ui.c(pending, ui.EMBER[2]))
 
 
 def main():

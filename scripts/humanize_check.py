@@ -19,9 +19,16 @@ Usage:
 
 import argparse
 import json
+import os
 import re
 import sys
 import unicodedata
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    import ui
+except ImportError:  # ui.py is optional; fall back to plain text
+    ui = None
 
 # --- Pattern 14: dashes -------------------------------------------------
 
@@ -480,42 +487,84 @@ def main():
         print(json.dumps(report, indent=2, ensure_ascii=False))
         return 0
 
-    print("verdict: %s" % report["verdict"])
-    print("pattern families hit: %d   total findings: %d"
-          % (report["cluster_score"], report["total_findings"]))
+    cluster = report["cluster_score"]
+    clean = cluster == 0
+
+    if ui is None:
+        print("verdict: %s" % report["verdict"])
+        print("pattern families hit: %d   total findings: %d"
+              % (cluster, report["total_findings"]))
+    else:
+        heat = ui.GOOD if clean else (ui.WARN if cluster <= 2 else
+                                      ui.EMBER[2] if cluster <= 4 else ui.BAD)
+        print()
+        print(ui.verdict(report["verdict"], ok=cluster <= 2))
+        # the heat gauge: one block per pattern family, capped at ten
+        blocks = min(cluster, 10)
+        gauge = ui.c("█" * blocks, heat) + ui.c("░" * (10 - blocks), ui.FAINT)
+        print("  %s %s  %s" % (
+            gauge,
+            ui.c("%d pattern famil%s" % (cluster, "y" if cluster == 1 else "ies"),
+                 heat, bold=True),
+            ui.c("%d findings" % report["total_findings"], ui.MUTED)))
 
     u = report["sentence_uniformity"]
     if u:
-        print("\nsentence rhythm: %d sentences, mean %.1f words, stdev %.1f"
-              % (u["sentence_count"], u["mean_words"], u["stdev_words"]))
+        line = ("%d sentences · mean %.1f words · stdev %.1f"
+                % (u["sentence_count"], u["mean_words"], u["stdev_words"]))
+        if ui is None:
+            print("\nsentence rhythm: " + line)
+        else:
+            print()
+            print("  %s %s" % (ui.c("rhythm".ljust(8), ui.FAINT),
+                               ui.c(line, ui.MUTED)))
         if "flag" in u:
-            print("  ! %s" % u["flag"])
+            print(("  ! %s" % u["flag"]) if ui is None
+                  else "  %s %s" % (ui.c("▲", ui.WARN), ui.c(u["flag"], ui.WARN)))
 
     if report["findings"]:
-        print("\nfindings:")
         by_label = {}
         for f in report["findings"]:
             by_label.setdefault(f["label"], []).append(f)
+
+        print("\nfindings:" if ui is None else "\n" + ui.rule("FINDINGS"))
         for label, items in sorted(by_label.items(), key=lambda kv: -len(kv[1])):
             head = items[0]
             loc = " (line %s)" % head["line"] if "line" in head else ""
-            print("  [%s] %s x%d%s" % (head.get("pattern"), label, len(items), loc))
+            if ui is None:
+                print("  [%s] %s x%d%s" % (head.get("pattern"), label, len(items), loc))
+            else:
+                print("  %s %s %s%s" % (
+                    ui.c("[%s]" % head.get("pattern"), ui.EMBER[2], bold=True),
+                    ui.c(label, ui.INK, bold=True),
+                    ui.c("x%d" % len(items), ui.MUTED),
+                    ui.c(loc, ui.FAINT)))
             seen_suggestions = set()
             for it in items[:3]:
                 shown = it.get("found") or it.get("context") or it.get("note", "")
                 if shown:
-                    print("      %s" % str(shown)[:100])
+                    txt = str(shown)[:100]
+                    print("      %s" % txt if ui is None
+                          else "      %s" % ui.c(txt, ui.MUTED))
                 sug = it.get("suggest")
                 # One vocabulary hit has its own replacement; a structural
                 # pattern repeats the same advice, so say it once.
                 if sug and sug not in seen_suggestions:
-                    print("      -> %s" % sug)
+                    print("      -> %s" % sug if ui is None
+                          else "      %s %s" % (ui.c("→", ui.GOOD), ui.c(sug, ui.GOOD)))
                     seen_suggestions.add(sug)
             if len(items) > 3:
-                print("      ... %d more" % (len(items) - 3))
+                more = "... %d more" % (len(items) - 3)
+                print("      %s" % more if ui is None
+                      else "      %s" % ui.c(more, ui.FAINT))
 
-    print("\nNote: hits inside quotations are legitimate. Look for clusters, "
-          "not isolated instances. Rewrite sentences, not characters.")
+    note = ("Hits inside quotations are legitimate. Look for clusters, not "
+            "isolated instances. Rewrite sentences, not characters.")
+    if ui is None:
+        print("\nNote: " + note)
+    else:
+        print()
+        print("  " + ui.c(note, ui.FAINT))
     return 0
 
 

@@ -106,6 +106,14 @@ Three rules keep the pass honest:
 2. **A writing sample outranks every style rule**, including the em dash ban. If the author uses them, keep them at their frequency. Sounding like the author beats scrubbing the tell.
 3. **Do not sand the post into blandness.** Removing every flagged pattern *and* every opinion, aside and specific leaves competent nothing. That is a failed pass, not a strict one.
 
+## The CLI
+
+`forge.py` runs the whole pipeline outside an agent harness. Colour is truecolor where the terminal supports it, degrades through 256 and 16 colour, and strips to plain ASCII when piped or when `NO_COLOR` is set — so output stays greppable and safe to redirect into a log.
+
+<img src="assets/cli.svg" alt="forge CLI output" width="100%">
+
+Progress goes to stderr and the pack goes to stdout, so `forge.py --source x.txt --json > pack.json` works without the banner landing in your JSON.
+
 ## Publishing
 
 | Mode | Setup | Cost | Use when |
@@ -135,6 +143,7 @@ references/
   publishing-setup.md                 Postiz + native API setup
 scripts/
   forge.py                            CLI: full pipeline
+  ui.py                               terminal styling, stdlib only
   critique.py                         mechanical rubric checks
   humanize_check.py                   AI-tell detector
   publish_postiz.py                   self-hosted Postiz publishing

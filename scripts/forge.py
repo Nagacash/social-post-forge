@@ -26,6 +26,12 @@ import sys
 import urllib.error
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    import ui
+except ImportError:  # ui.py is optional; fall back to plain text
+    ui = None
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 
@@ -266,6 +272,37 @@ your two answers.
     return extract_json(llm(prompt, max_tokens=8000))
 
 
+def say(n, title, detail="", state="run"):
+    """One progress line per stage, on stderr so stdout stays pipeable."""
+    if ui is None:
+        sys.stderr.write("[%d/5] %s %s\n" % (n, title.lower(), detail))
+    else:
+        sys.stderr.write(ui.step(n, 5, title, state, detail) + "\n")
+    sys.stderr.flush()
+
+
+def show_reports(reports):
+    for platform, rep in reports.items():
+        mech = rep.get("mechanical", {})
+        tells = rep.get("tells", {})
+        mv = mech.get("verdict", "?")
+        tv = tells.get("verdict", "?")
+        if ui is None:
+            sys.stderr.write("    %-10s %-18s tells: %s\n" % (platform, mv, tv))
+            continue
+        passed = not mech.get("failing_criteria")
+        families = tells.get("cluster_score", 0)
+        clean = families <= 2
+        sys.stderr.write("      %s %s  %s  %s\n" % (
+            ui.c(platform.ljust(10), ui.INK),
+            ui.c(("✓ " if passed else "✗ ") + mv,
+                 ui.GOOD if passed else ui.WARN),
+            ui.c("·", ui.FAINT),
+            ui.c("%d tell famil%s" % (families, "y" if families == 1 else "ies"),
+                 ui.GOOD if clean else ui.BAD)))
+    sys.stderr.flush()
+
+
 def main():
     ap = argparse.ArgumentParser(description="social-post-forge CLI")
     ap.add_argument("--source", required=True, help="text/markdown file, or '-' for stdin")
@@ -285,36 +322,33 @@ def main():
         args.source, encoding="utf-8").read()
     voice = open(args.voice, encoding="utf-8").read() if args.voice else ""
 
-    print("[1/5] ingesting...", file=sys.stderr)
+    if ui is not None:
+        sys.stderr.write(ui.banner() + "\n")
+
+    say(1, "INGEST", "reading the source")
     brief = stage_ingest(source, voice)
-    if not brief.get("hard_facts"):
-        print("  ! No hard facts found in the source. Posts will be generic. "
-              "Add specifics and re-run.", file=sys.stderr)
+    facts = len(brief.get("hard_facts") or [])
+    quotes = len(brief.get("quotable_moments") or [])
+    if facts:
+        say(1, "INGEST", "%d hard facts · %d quotable moments" % (facts, quotes), "ok")
+    else:
+        say(1, "INGEST", "no hard facts in the source, posts will be generic", "warn")
 
-    print("[2/5] drafting %s..." % ", ".join(platforms), file=sys.stderr)
+    say(2, "DRAFT", "writing natively per platform")
     posts = stage_draft(brief, voice, platforms)
+    say(2, "DRAFT", " · ".join(platforms), "ok")
 
-    print("[3/5] checking...", file=sys.stderr)
+    say(3, "CRITIQUE", "rubric + tell detection")
     reports = stage_critique(posts)
-    for platform, rep in reports.items():
-        mech = rep.get("mechanical", {})
-        tells = rep.get("tells", {})
-        print("  %-10s %-18s tells: %s"
-              % (platform,
-                 mech.get("verdict", "?"),
-                 tells.get("verdict", "?")), file=sys.stderr)
+    show_reports(reports)
 
     if not args.no_rewrite:
-        print("[4/5] rewriting%s..." % ("" if args.no_humanize else " + humanizing"),
-              file=sys.stderr)
+        label = "rewriting" if args.no_humanize else "rewriting + 33-pattern pass"
+        say(4, "HUMANIZE", label)
         posts = stage_rewrite(posts, reports, brief, voice, humanize=not args.no_humanize)
         reports = stage_critique({k: v for k, v in posts.items() if isinstance(v, dict)})
-        print("  after rewrite:", file=sys.stderr)
-        for platform, rep in reports.items():
-            print("    %-10s %-18s tells: %s"
-                  % (platform,
-                     rep.get("mechanical", {}).get("verdict", "?"),
-                     rep.get("tells", {}).get("verdict", "?")), file=sys.stderr)
+        say(4, "HUMANIZE", "after rewrite", "ok")
+        show_reports(reports)
 
     audit = posts.pop("audit", None)
     pack = {
@@ -326,7 +360,7 @@ def main():
 
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(pack, f, indent=2, ensure_ascii=False)
-    print("[5/5] wrote %s" % args.out, file=sys.stderr)
+    say(5, "PACK", args.out, "ok")
 
     if args.json:
         print(json.dumps(pack, indent=2, ensure_ascii=False))
@@ -335,9 +369,9 @@ def main():
             entry = pack["posts"].get(platform)
             if not entry:
                 continue
-            print("\n" + "=" * 60)
-            print(platform.upper())
-            print("=" * 60)
+            print()
+            print(("=" * 60 + "\n" + platform.upper() + "\n" + "=" * 60)
+                  if ui is None else ui.rule(platform.upper()))
             print(entry.get("copy", ""))
             if entry.get("script"):
                 print("\n--- script ---\n" + entry["script"])
