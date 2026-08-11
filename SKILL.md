@@ -1,3 +1,16 @@
+---
+name: social-post-forge
+description: Turn any source (podcast audio, business description, article, URL, notes) into platform-native social posts for LinkedIn, Instagram, X/Threads and TikTok. Drafts natively per platform, scores against an 8-criterion rubric, runs a 33-pattern humanizer pass to strip AI writing tells, rewrites against the structure of currently-trending posts, produces image prompts, then publishes via copy-paste pack, self-hosted Postiz, or native platform APIs. Use for content repurposing, or standalone to audit and humanize an existing draft.
+version: 1.0.0
+author: Nagacash
+license: MIT
+metadata:
+  hermes:
+    tags: [content, social-media, copywriting, marketing, humanizer, anti-slop, repurposing, linkedin, instagram, tiktok, publishing]
+    homepage: https://github.com/Nagacash/social-post-forge
+    related_skills: [humanizer, ghostwriter]
+---
+
 # social-post-forge
 
 Turn any source — a business description, a podcast episode, a text file, a URL, a pile of notes — into platform-native social posts for LinkedIn, Instagram, X/Threads and TikTok/Reels. Every draft is scored against a rubric, rewritten against the structure of what is currently working in the niche, paired with an image prompt, and then either handed over as a copy-paste pack or published automatically.
@@ -11,6 +24,58 @@ The pipeline exists because the usual failure mode is not "the AI can't write" �
 Use when the user wants social content produced from source material: "make posts from this podcast", "write this week's LinkedIn", "turn our about page into a launch campaign", "repurpose this article". Also use when they want an existing draft critiqued or rewritten against current trends.
 
 Do not use for one-off single-sentence tweets where the whole pipeline is overhead, or for paid ad copy (different discipline, different rubric).
+
+---
+
+## Running this on any harness
+
+This skill is plain Markdown plus standard-library Python, so it runs anywhere that supports skill-style instructions: Hermes Agent, Claude Code, Codex, Cursor, OpenClaw, or a bare shell.
+
+The scripts have **no dependencies** beyond the Python 3.8+ standard library and no API keys, so `humanize_check.py`, `critique.py` and both publishers work identically everywhere. Only the generative stages depend on the host's tools.
+
+Named tools below use Hyperagent's names because that is where this was built. **Substitute your harness's equivalent** — the capability is what matters, not the name.
+
+| Stage needs | Hyperagent | Hermes Agent | Claude Code / Codex | If unavailable |
+|---|---|---|---|---|
+| Transcribe audio | `TranscribeAudio` | `transcribe` tool, or `whisper` via shell | `whisper` / `ffmpeg` via Bash | Ask the user to paste a transcript. Do not guess at audio content. |
+| Read a URL | `ExaContents` | `web_fetch` / `web_search` | `WebFetch` | Ask the user to paste the text. |
+| Read a local file | `Read` | `read_file` | `Read` | — (universally available) |
+| Trend research | `ExaSearch` (category `tweet`/`linkedin`, date-filtered) | `web_search` | `WebSearch` | **Skip stage 4** and say so. A guessed trend report is worse than none. |
+| Generate an image | `GenerateImage` | image toolset if enabled | none by default | Hand over the image prompt. It is useful on its own. |
+| Find reference photos | `SearchImages` | `web_search` images | none | Skip; describe the shot in the prompt instead. |
+| Public image URL (Instagram) | `PublishFilePublicly` | any static host | any static host | Instagram cannot post without one. Use Postiz, or fall back to copy-paste. |
+| Persist the voice profile | `CreateMemory` | Hermes memory / `~/.hermes/` | a file in the repo | Save `voice-profiles/{business}.yaml` next to the skill. |
+| Separate reviewer for stage 3a | subagent via `Agent` | `delegate_task` | `Task` tool | Do the critique pass in a fresh turn, and read as a reviewer rather than the author. |
+
+Two rules when a capability is missing:
+
+1. **Degrade loudly.** Tell the user which stage you skipped and why. Silently dropping the trend benchmark and presenting the output as fully processed is the worst possible failure, because the post looks finished.
+2. **Never simulate a tool.** No invented transcript, no imagined trending posts, no fabricated engagement numbers. That breaks the anti-fabrication rule the whole pipeline is built around.
+
+### Install
+
+Hermes Agent:
+
+```bash
+hermes skills install https://raw.githubusercontent.com/Nagacash/social-post-forge/main/SKILL.md
+# or clone the whole directory for the references and scripts
+git clone https://github.com/Nagacash/social-post-forge ~/.hermes/skills/social-post-forge
+```
+
+Claude Code, Cursor, or any harness with a skills directory:
+
+```bash
+git clone https://github.com/Nagacash/social-post-forge \
+  ~/.claude/skills/social-post-forge
+```
+
+Cross-agent skills CLI:
+
+```bash
+npx skills add Nagacash/social-post-forge
+```
+
+Clone the whole repo rather than just `SKILL.md` where you can. `SKILL.md` alone still works — it carries the full pipeline — but the references hold the 33-pattern catalogue and the rubric, and the scripts do the mechanical checking. Without them the humanize pass is judgement-only.
 
 ---
 
@@ -277,15 +342,15 @@ Instagram needs the image at a public HTTPS URL. `PublishFilePublicly` on a gene
 
 ## Running the whole thing
 
-Inside this environment, work through the stages using the tools directly — that is the intended path and gives the best results.
+Inside an agent harness, work through the stages using the host's tools directly — that is the intended path and gives the best results, because critique and trend benchmarking are reasoning tasks rather than API calls.
 
-The repo also ships a CLI for people outside this environment:
+The repo also ships a CLI for use outside a harness:
 
 ```bash
 python3 scripts/forge.py --source episode.txt --voice voice-profiles/naga.yaml --platforms linkedin,instagram,x,tiktok
 ```
 
-The CLI orchestrates ingest, mechanical critique and publishing, and calls an LLM API for the generative stages. It needs `ANTHROPIC_API_KEY`. It is deliberately a thinner experience than running the skill here — the critique and benchmark stages are much stronger with real agent reasoning behind them.
+The CLI orchestrates ingest, mechanical critique and publishing, and calls an LLM API for the generative stages. It needs `ANTHROPIC_API_KEY`. It is deliberately the thinner experience — it has no trend benchmarking, because that needs a browsing agent, and its critique stage is mechanical only.
 
 ---
 

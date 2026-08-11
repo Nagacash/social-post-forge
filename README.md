@@ -27,17 +27,31 @@ The usual failure is not that models cannot write. It is that one generic post g
 
 ### As an agent skill
 
-The runtime artifact is `SKILL.md`, so any harness that supports skill-style instructions can use it.
+The runtime artifact is `SKILL.md` with agentskills.io-compatible YAML frontmatter, so any harness that supports skill-style instructions can discover and load it — Hermes Agent, Claude Code, Codex, Cursor, OpenClaw.
+
+**Hermes Agent** (Nous Research):
 
 ```bash
-git clone https://github.com/Nagacash/social-post-forge /path/to/your/skills/social-post-forge
+hermes skills install https://raw.githubusercontent.com/Nagacash/social-post-forge/main/SKILL.md
+# or clone the full directory to get references and scripts
+git clone https://github.com/Nagacash/social-post-forge ~/.hermes/skills/social-post-forge
 ```
 
-Or with the cross-agent skills CLI:
+**Claude Code / Cursor / any skills directory:**
+
+```bash
+git clone https://github.com/Nagacash/social-post-forge ~/.claude/skills/social-post-forge
+```
+
+**Cross-agent skills CLI:**
 
 ```bash
 npx skills add Nagacash/social-post-forge
 ```
+
+Clone the whole repo rather than just `SKILL.md` where you can. `SKILL.md` alone carries the full pipeline, but the references hold the 33-pattern catalogue and the rubric, and the scripts do the mechanical checking.
+
+The skill names Hyperagent tools (`TranscribeAudio`, `ExaSearch`, `GenerateImage`) because that is where it was built. `SKILL.md` includes a capability-mapping table so an agent on another harness substitutes its own equivalents, and states what to skip — loudly — when a capability is missing. The scripts need no host tools at all.
 
 ### As a CLI
 
