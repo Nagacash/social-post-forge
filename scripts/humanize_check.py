@@ -49,6 +49,34 @@ INVISIBLES = {
     "‏": "right-to-left mark",
 }
 
+# Hard failures split in two. Invisible characters and the unicode ellipsis
+# have exact, meaning-preserving replacements, so a machine can fix them with
+# no judgement involved. Dashes cannot: the appositive construction is the
+# tell, not the glyph, so those need a sentence rewritten by something that
+# can write. Burning a model call on the mechanical half is waste, and on a
+# slow local model it is the difference between the repair loop converging
+# and not.
+SAFE_REPLACEMENTS = {
+    "\u2026": "...",   # unicode ellipsis
+    "\u200b": "",      # zero-width space
+    "\ufeff": "",      # byte order mark
+    "\u00ad": "",      # soft hyphen
+    "\u202f": " ",     # narrow no-break space -> ordinary space
+    "\u200e": "",      # left-to-right mark
+    "\u200f": "",      # right-to-left mark
+}
+
+
+def sanitize_safe(text):
+    """Apply the deterministic half of the hard rules. Returns (text, fixed)."""
+    fixed = []
+    for ch, repl in SAFE_REPLACEMENTS.items():
+        if ch in text:
+            text = text.replace(ch, repl)
+            fixed.append(INVISIBLES.get(ch, "U+%04X" % ord(ch)))
+    return text, sorted(set(fixed))
+
+
 # --- Pattern 7: AI vocabulary cluster -----------------------------------
 
 AI_VOCAB = {
@@ -495,9 +523,22 @@ def main():
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     ap.add_argument("--allow-em-dash", action="store_true",
                     help="voice sample uses em dashes, so do not flag them")
+    ap.add_argument("--fix-safe", action="store_true",
+                    help="apply the deterministic fixes (invisible unicode, "
+                         "ellipsis) in place and re-check. Dashes are never "
+                         "auto-fixed: they need a sentence rewritten.")
     args = ap.parse_args()
 
     text = args.text if args.text else open(args.file, encoding="utf-8").read()
+
+    if args.fix_safe:
+        text, fixed = sanitize_safe(text)
+        if fixed and args.file:
+            with open(args.file, "w", encoding="utf-8") as f:
+                f.write(text)
+        if fixed and not args.json:
+            print("auto-fixed: %s" % ", ".join(fixed))
+
     report = analyse(text, allow_em_dash=args.allow_em_dash)
 
     if args.json:

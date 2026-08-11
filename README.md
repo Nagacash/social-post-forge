@@ -136,6 +136,8 @@ The insight underneath all 33 patterns, in Wikipedia's words:
 
 **Hard rules vs judgement calls.** Most patterns only convict in combination, so the detector scores by pattern family. But dashes and invisible unicode fail at *any* count — they are not judgement calls, and the rubric fails the post on formatting regardless. Those produce a `hard_fail` verdict and a non-zero exit, and `forge.py` runs a targeted repair pass rather than shipping them with a soft verdict.
 
+**Machine-fixable versus writer-fixable.** Invisible unicode and the ellipsis have exact replacements, so `--fix-safe` handles them deterministically and `forge.py` applies it after every generation. Dashes never get auto-fixed: swapping `—` for `-` keeps the construction that gave it away. Splitting these means the repair loop only ever asks a model for the thing that genuinely needs writing, which matters most on a slow local model.
+
 Three rules keep the pass honest:
 
 1. **Never invent facts.** Specificity has to come from the source or the author, never from the rewrite. A rewrite that adds a plausible statistic to sound concrete has made the post worse.

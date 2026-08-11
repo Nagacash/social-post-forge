@@ -33,6 +33,10 @@ try:
     import ui
 except ImportError:  # ui.py is optional; fall back to plain text
     ui = None
+try:
+    from humanize_check import sanitize_safe
+except ImportError:  # keep the CLI usable if the detector is missing
+    sanitize_safe = None
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -400,6 +404,42 @@ def stage_critique(posts, allow_em_dash=False):
     return reports
 
 
+_TEXT_FIELDS = ("copy", "script")
+_LIST_FIELDS = ("carousel", "thread")
+
+
+def sanitize_posts(posts):
+    """Fix the deterministic hard failures before anything asks a model to.
+
+    Invisible unicode and the ellipsis have exact replacements, so spending a
+    repair round on them is waste. Dashes are deliberately left alone: the
+    construction is the tell, so those go to the rewriter.
+    """
+    if sanitize_safe is None:
+        return posts, {}
+    fixed = {}
+    for platform, entry in posts.items():
+        if not isinstance(entry, dict):
+            continue
+        hits = []
+        for f in _TEXT_FIELDS:
+            if isinstance(entry.get(f), str):
+                entry[f], got = sanitize_safe(entry[f])
+                hits += got
+        for f in _LIST_FIELDS:
+            if isinstance(entry.get(f), list):
+                cleaned = []
+                for item in entry[f]:
+                    if isinstance(item, str):
+                        item, got = sanitize_safe(item)
+                        hits += got
+                    cleaned.append(item)
+                entry[f] = cleaned
+        if hits:
+            fixed[platform] = sorted(set(hits))
+    return posts, fixed
+
+
 def _slim_reports(reports):
     """Drop the parts of the checker output a rewrite cannot act on.
 
@@ -593,7 +633,11 @@ def main():
 
     say(2, "DRAFT", "writing natively per platform")
     posts = stage_draft(brief, voice, platforms)
+    posts, autofixed = sanitize_posts(posts)
     say(2, "DRAFT", " · ".join(platforms), "ok")
+    if autofixed:
+        say(2, "SANITIZE", "auto-fixed %s" % "; ".join(
+            "%s: %s" % (p, ", ".join(v)) for p, v in autofixed.items()), "ok")
 
     say(3, "CRITIQUE", "rubric + tell detection")
     reports = stage_critique(posts, allow_em_dash=allow_em_dash)
@@ -603,6 +647,10 @@ def main():
         label = "rewriting" if args.no_humanize else "rewriting + 33-pattern pass"
         say(4, "HUMANIZE", label)
         posts = stage_rewrite(posts, reports, brief, voice, humanize=not args.no_humanize)
+        posts, autofixed = sanitize_posts(posts)
+        if autofixed:
+            say(4, "SANITIZE", "auto-fixed %s" % "; ".join(
+                "%s: %s" % (p, ", ".join(v)) for p, v in autofixed.items()), "ok")
         reports = stage_critique(
             {k: v for k, v in posts.items() if isinstance(v, dict)},
             allow_em_dash=allow_em_dash)
@@ -617,7 +665,8 @@ def main():
                 break
             say(4, "ENFORCE", "banned patterns survived in %s (pass %d)"
                 % (", ".join(failing), attempt), "warn")
-            posts, fixed = stage_repair(posts, reports, brief)
+            posts, _ = stage_repair(posts, reports, brief)
+            posts, _ = sanitize_posts(posts)
             reports = stage_critique(
                 {k: v for k, v in posts.items() if isinstance(v, dict)},
                 allow_em_dash=allow_em_dash)
