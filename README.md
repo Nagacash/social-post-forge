@@ -98,7 +98,9 @@ export FORGE_TIMEOUT=3600            # default is already 900s for local
 
 `FORGE_TIMEOUT` defaults to 180s for hosted providers and **900s when `FORGE_BASE_URL` is set**, because a local run that was always going to take ten minutes should not be killed at three. Timeouts exit with the warm-up instructions rather than a stack trace. `FORGE_KEEP_ALIVE` passes Ollama's `keep_alive` through on every call if you would rather not set the env var.
 
-Expect roughly 10 minutes end to end for four platforms on a warm 4B model on CPU, and considerably worse cold. This is the model, not the pipeline.
+Expect roughly 10 minutes end to end for four platforms on a warm 4B model on CPU, and considerably worse cold. That is decode speed, which no amount of prompt trimming fixes.
+
+**Prompt size is handled at the source.** The rewrite stage used to carry all 33 catalogue patterns and the full rubric on every call — 53% of the largest prompt was two static files. It now carries only the patterns the detector actually fired plus the judgement guards, and a slimmed checker report. Measured on a real single-dash survivor: **25,576 → 9,776 characters, a 62% cut, about 3,950 input tokens saved per rewrite.** Selective rather than compressed, because a banned-word list is exactly the kind of text you must not lossily compress.
 
 The CLI is deliberately the thinner experience: mechanical critique only, and no trend benchmarking, because that stage needs a browsing agent. **If you already run Hermes, Claude Code or Codex, use the skill instead** — the agent drives the stages with real reasoning, needs no key at all, and gets you the critique and benchmark stages the CLI cannot do.
 

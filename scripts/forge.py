@@ -56,6 +56,85 @@ TIMEOUT = int(os.environ.get("FORGE_TIMEOUT", _DEFAULT_TIMEOUT))
 ALL_PLATFORMS = ["linkedin", "instagram", "x", "tiktok"]
 
 
+# Pattern numbers -> the criteria they bear on, so a rewrite only carries the
+# rubric rows it actually needs.
+_ALWAYS_HUMANIZER = (
+    "## The four rules of the rewrite",
+    "## Voice calibration beats every rule below",
+    "## Do not flag these (false positives)",
+    "## Preserve these (signs of human writing)",
+    "## Social-specific application layer",
+)
+
+
+def _split_sections(text, marker):
+    """Split markdown on a heading marker, keeping the heading with its body."""
+    out, cur, name = {}, [], None
+    for line in text.split("\n"):
+        if line.startswith(marker):
+            if name is not None:
+                out[name] = "\n".join(cur).rstrip()
+            name, cur = line, [line]
+        elif name is not None:
+            cur.append(line)
+    if name is not None:
+        out[name] = "\n".join(cur).rstrip()
+    return out
+
+
+def humanizer_excerpt(reports):
+    """Only the catalogue entries that actually fired, plus the judgement guards.
+
+    Sending all 33 patterns every time was over half the rewrite prompt. The
+    detector already knows which ones hit, so carry those and drop the rest.
+    The guard sections always travel: without the false-positive list and the
+    preserve list, a rewrite sands the post into competent nothing.
+    """
+    full = read_ref("humanizer.md")
+    if not full:
+        return ""
+    fired = set()
+    for rep in reports.values():
+        for f in rep.get("tells", {}).get("findings", []):
+            pat = f.get("pattern")
+            if isinstance(pat, int):
+                fired.add(pat)
+    if not fired:
+        fired = {14}  # dashes: the one worth restating even on a clean report
+
+    body = _split_sections(full, "**")
+    keep = [v for k, v in body.items()
+            if any(k.startswith("**%d." % n) for n in fired)]
+    guards = _split_sections(full, "## ")
+    keep += [v for k, v in guards.items() if k.strip() in _ALWAYS_HUMANIZER]
+
+    header = ("Relevant entries from the 33-pattern catalogue "
+              "(references/humanizer.md). Patterns that did not fire are "
+              "omitted; do not introduce them either.\n\n")
+    return header + "\n\n".join(keep)
+
+
+def rubric_excerpt(reports):
+    """Only the criteria that are failing, plus the threshold rule."""
+    full = read_ref("rubric.md")
+    if not full:
+        return ""
+    failing = set()
+    for rep in reports.values():
+        for c in rep.get("mechanical", {}).get("failing_criteria", []):
+            failing.add(c)
+    sections = _split_sections(full, "## ")
+    wanted = {"hook": "1.", "specificity": "2.", "voice": "3.",
+              "formatting": "4.", "cta": "5."}
+    prefixes = [wanted[c] for c in failing if c in wanted]
+    prefixes += ["8."]  # anti-fabrication always travels
+    keep = [v for k, v in sections.items()
+            if any(k.startswith("## " + pre) for pre in prefixes)]
+    head = ("Failing rubric criteria. Pass threshold is 4 on every criterion "
+            "and 5 on anti-fabrication.\n\n")
+    return head + "\n\n".join(keep)
+
+
 def read_ref(name):
     path = os.path.join(ROOT, "references", name)
     try:
@@ -321,9 +400,39 @@ def stage_critique(posts, allow_em_dash=False):
     return reports
 
 
+def _slim_reports(reports):
+    """Drop the parts of the checker output a rewrite cannot act on.
+
+    The raw reports carry every finding with context strings and duplicated
+    suggestions. The rewriter needs the verdict, what failed, and one example
+    per pattern — not the full dump.
+    """
+    slim = {}
+    for platform, rep in reports.items():
+        mech = rep.get("mechanical", {})
+        tells = rep.get("tells", {})
+        seen, examples = set(), []
+        for f in tells.get("findings", []):
+            key = f.get("label")
+            if key in seen:
+                continue
+            seen.add(key)
+            examples.append({"pattern": f.get("pattern"), "label": key,
+                             "found": str(f.get("found", ""))[:60]})
+        slim[platform] = {
+            "verdict": mech.get("verdict"),
+            "failing_criteria": mech.get("failing_criteria", []),
+            "issues": mech.get("platform_check", {}).get("issues", []),
+            "warnings": mech.get("platform_check", {}).get("warnings", [])[:4],
+            "hard_failures": tells.get("hard_failures", []),
+            "tell_examples": examples[:12],
+        }
+    return slim
+
+
 def stage_rewrite(posts, reports, brief, voice_text, humanize=True):
-    rubric = read_ref("rubric.md")
-    humanizer = read_ref("humanizer.md") if humanize else ""
+    rubric = rubric_excerpt(reports)
+    humanizer = humanizer_excerpt(reports) if humanize else ""
 
     prompt = """Rewrite these posts to fix what the checkers found.
 
@@ -350,7 +459,7 @@ SOURCE BRIEF (the only permitted source of facts):
 RUBRIC:
 %s
 """ % (json.dumps(posts, indent=2, ensure_ascii=False),
-       json.dumps(reports, indent=2, ensure_ascii=False)[:12000],
+       json.dumps(_slim_reports(reports), indent=2, ensure_ascii=False)[:6000],
        json.dumps(brief, indent=2, ensure_ascii=False),
        rubric)
 
