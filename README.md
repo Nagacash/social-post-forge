@@ -88,6 +88,18 @@ FORGE_BASE_URL=http://localhost:11434/v1 FORGE_API_KEY=x \
 FORGE_MODEL=llama3.1 python3 scripts/forge.py --source episode.txt
 ```
 
+**Running against a local model.** The pipeline makes five to seven sequential generations, each streaming thousands of tokens. On a hosted model that is under a minute; on a quantized model running on CPU it is minutes per call, and a *cold* model adds the disk load on top — which looks like a hang rather than slowness. Warm it and keep it resident:
+
+```bash
+ollama run gemma3:4b "hi"            # pay the load cost once
+export OLLAMA_KEEP_ALIVE=30m         # stop eviction between calls
+export FORGE_TIMEOUT=3600            # default is already 900s for local
+```
+
+`FORGE_TIMEOUT` defaults to 180s for hosted providers and **900s when `FORGE_BASE_URL` is set**, because a local run that was always going to take ten minutes should not be killed at three. Timeouts exit with the warm-up instructions rather than a stack trace. `FORGE_KEEP_ALIVE` passes Ollama's `keep_alive` through on every call if you would rather not set the env var.
+
+Expect roughly 10 minutes end to end for four platforms on a warm 4B model on CPU, and considerably worse cold. This is the model, not the pipeline.
+
 The CLI is deliberately the thinner experience: mechanical critique only, and no trend benchmarking, because that stage needs a browsing agent. **If you already run Hermes, Claude Code or Codex, use the skill instead** — the agent drives the stages with real reasoning, needs no key at all, and gets you the critique and benchmark stages the CLI cannot do.
 
 ## Usage

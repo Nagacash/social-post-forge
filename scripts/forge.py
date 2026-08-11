@@ -22,6 +22,7 @@ import argparse
 import json
 import os
 import re
+import socket
 import subprocess
 import sys
 import urllib.error
@@ -43,6 +44,14 @@ BASE_URL = os.environ.get("FORGE_BASE_URL", "").rstrip("/")
 DEFAULT_MODEL = "claude-sonnet-4-5-20250929" if not BASE_URL else "gpt-4o-mini"
 MODEL = os.environ.get("FORGE_MODEL", DEFAULT_MODEL)
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
+
+# A hosted frontier model answers in seconds. A quantized model on CPU streams
+# thousands of tokens at a few per second, so the same call can take many
+# minutes — and this pipeline makes five to seven of them in sequence. Default
+# generously when pointed at a local endpoint rather than failing a run that
+# was only ever going to be slow.
+_DEFAULT_TIMEOUT = 900 if BASE_URL else 180
+TIMEOUT = int(os.environ.get("FORGE_TIMEOUT", _DEFAULT_TIMEOUT))
 
 ALL_PLATFORMS = ["linkedin", "instagram", "x", "tiktok"]
 
@@ -78,6 +87,10 @@ def llm(prompt, system=None, max_tokens=4000, json_mode=True):
         # servers ignore an unknown field.
         if os.environ.get("FORGE_NO_THINK", "1") == "1":
             payload["think"] = False
+        if os.environ.get("FORGE_KEEP_ALIVE"):
+            # Ollama-specific: stop the model being evicted between the
+            # pipeline's sequential calls, which is what makes run two cold.
+            payload["keep_alive"] = os.environ["FORGE_KEEP_ALIVE"]
         headers = {"Authorization": "Bearer " + key,
                    "content-type": "application/json"}
     else:
@@ -97,13 +110,28 @@ def llm(prompt, system=None, max_tokens=4000, json_mode=True):
     req = urllib.request.Request(url, data=json.dumps(payload).encode(),
                                  headers=headers, method="POST")
     try:
-        with urllib.request.urlopen(req, timeout=180) as r:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
             body = json.loads(r.read().decode())
     except urllib.error.HTTPError as e:
         sys.exit("%s %d: %s" % (url, e.code,
                                 e.read().decode("utf-8", "replace")[:400]))
+    except (socket.timeout, TimeoutError):
+        sys.exit(
+            "Timed out after %ds waiting on %s.\n"
+            "On CPU-only inference this is normal for a cold model: the first "
+            "call pays for loading it from disk. Warm it once with\n"
+            "  ollama run %s \"hi\"\n"
+            "keep it resident with OLLAMA_KEEP_ALIVE=30m, and raise the ceiling "
+            "with FORGE_TIMEOUT=3600." % (TIMEOUT, MODEL, MODEL))
     except urllib.error.URLError as e:
-        sys.exit("Cannot reach %s (%s)" % (url, e.reason))
+        reason = getattr(e, "reason", e)
+        if isinstance(reason, (socket.timeout, TimeoutError)):
+            sys.exit(
+                "Timed out after %ds waiting on %s. Warm the model first "
+                "(ollama run %s \"hi\"), keep it resident with "
+                "OLLAMA_KEEP_ALIVE=30m, and raise FORGE_TIMEOUT."
+                % (TIMEOUT, MODEL, MODEL))
+        sys.exit("Cannot reach %s (%s)" % (url, reason))
 
     if BASE_URL:
         try:
