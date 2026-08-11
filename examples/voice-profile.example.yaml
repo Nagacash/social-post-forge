@@ -1,0 +1,91 @@
+# Voice profile — captured once per business, reused on every run.
+#
+# The single most valuable field is reference_posts. Three real posts teach
+# voice better than any number of adjectives. "Professional but warm" means
+# nothing to a model; three real posts mean everything.
+
+business: "Naga Codex"
+one_liner: "We build AI systems for small operators who can't hire a dev team."
+
+audience:
+  who: "Solo founders and 2-10 person teams running a real business, not a startup"
+  pain: "They are drowning in manual work but every tool assumes an engineer"
+  sophistication: "Technical enough to know what an API is, not enough to build one"
+
+pillars:
+  - "Automation that a non-engineer can actually own"
+  - "What building in public actually costs"
+  - "Teardowns of tools that overpromise"
+  - "The unglamorous operations work nobody posts about"
+
+voice:
+  register: "Direct, first person, dry. Closer to a good email than a press release."
+  tense: "Past tense for stories, present for opinions"
+  person: "I for opinions and stories, we for company work"
+  humour: "Understated. Never a joke for its own sake."
+  sentence_rhythm: "Deliberately uneven. Some fragments. Occasional long sentence
+    that earns its length by carrying a real chain of reasoning."
+
+# Three real posts that performed well. Paste them verbatim, including the
+# things that look like mistakes. Those are the voice.
+reference_posts:
+  - |
+    We cut our onboarding from 40 minutes to 6.
+
+    Not by rewriting the app. By deleting the four screens nobody read.
+
+    I fought this for two years because I built those screens.
+  - |
+    Every automation tool demo uses the same example: "send a Slack message when
+    a form is submitted."
+
+    Nobody's business problem is that.
+
+    Mine was: three suppliers email spreadsheets in three formats on three
+    different days and someone has to reconcile them by Friday. That took nine
+    months to automate properly and no demo will ever show it.
+  - |
+    A client asked me to build something last month. I told them not to.
+
+    The manual version took their team 20 minutes a week. The automated version
+    would have taken me three weeks and them a maintenance burden forever.
+
+    Sometimes the answer is a spreadsheet.
+
+# Words and claims this business will not say.
+banned:
+  - "revolutionary"
+  - "game-changer"
+  - "unlock your potential"
+  - "10x"
+  - "AI-powered" # we say what it actually does
+  - any claim about time saved that we have not measured
+  - client names without written permission
+
+# Things only this business can credibly say. Gold for specificity.
+proof_points:
+  - "Nine months on the supplier reconciliation build"
+  - "Onboarding 40 minutes to 6"
+  - "Based in Hamburg"
+
+cta_default: "Reply and tell me what your version of the supplier spreadsheet is."
+
+platforms:
+  linkedin:
+    handle: "@nagacodex"
+    hashtags: ["#Automation", "#SmallBusiness"]
+    notes: "Main channel. Longer posts do well here."
+  instagram:
+    handle: "@nagacodex"
+    hashtags: ["#automation", "#solofounder", "#buildinpublic"]
+    notes: "Carousels only. Single images do nothing for us."
+  x:
+    handle: "@nagacodex"
+    notes: "Short and blunt. Threads for teardowns."
+  tiktok:
+    handle: "@nagacodex"
+    notes: "Screen recordings with voiceover. No talking head."
+
+# Set true if the author genuinely uses em dashes. The humanizer treats a real
+# writing sample as outranking its own style rules, including the dash ban.
+author_uses_em_dashes: false

@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+pack.json
+voice-profiles/
+!examples/
+.DS_Store
