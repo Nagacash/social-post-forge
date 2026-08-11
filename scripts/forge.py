@@ -56,7 +56,7 @@ def read_ref(name):
         return ""
 
 
-def llm(prompt, system=None, max_tokens=4000):
+def llm(prompt, system=None, max_tokens=4000, json_mode=True):
     """Call the configured provider. OpenAI-compatible when FORGE_BASE_URL is set."""
     if BASE_URL:
         key = (os.environ.get("FORGE_API_KEY")
@@ -69,6 +69,15 @@ def llm(prompt, system=None, max_tokens=4000):
         messages = ([{"role": "system", "content": system}] if system else [])
         messages.append({"role": "user", "content": prompt})
         payload = {"model": MODEL, "max_tokens": max_tokens, "messages": messages}
+        if json_mode:
+            # Small local models drift out of JSON without this. Servers that
+            # do not implement it ignore the field rather than erroring.
+            payload["response_format"] = {"type": "json_object"}
+        # Reasoning models (qwen3 and friends) can spend the whole token budget
+        # thinking and return empty content. Ollama accepts this switch; other
+        # servers ignore an unknown field.
+        if os.environ.get("FORGE_NO_THINK", "1") == "1":
+            payload["think"] = False
         headers = {"Authorization": "Bearer " + key,
                    "content-type": "application/json"}
     else:
@@ -98,11 +107,45 @@ def llm(prompt, system=None, max_tokens=4000):
 
     if BASE_URL:
         try:
-            return body["choices"][0]["message"]["content"]
+            content = body["choices"][0]["message"]["content"]
         except (KeyError, IndexError):
             sys.exit("Unexpected response shape from %s:\n%s"
                      % (url, json.dumps(body)[:400]))
+        if not (content or "").strip():
+            sys.exit(
+                "%s returned empty content. If this is a reasoning model it "
+                "likely spent the budget thinking: raise max_tokens, or pick a "
+                "non-reasoning model with FORGE_MODEL." % MODEL)
+        return content
     return "".join(b.get("text", "") for b in body.get("content", []))
+
+
+def _repair_newlines(chunk):
+    """Escape raw newlines that appear inside JSON string literals.
+
+    Social copy is full of line breaks and smaller models emit them literally
+    inside the string rather than as \\n, which is invalid JSON. Rather than
+    crash on an otherwise good generation, repair it.
+    """
+    out, in_str, esc = [], False, False
+    for ch in chunk:
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            elif ch == "\n":
+                out.append("\\n"); continue
+            elif ch == "\r":
+                continue
+            elif ch == "\t":
+                out.append("\\t"); continue
+        elif ch == '"':
+            in_str = True
+        out.append(ch)
+    return "".join(out)
 
 
 def extract_json(text):
@@ -128,10 +171,14 @@ def extract_json(text):
         elif ch in "}]":
             depth -= 1
             if depth == 0:
+                chunk = text[start:i + 1]
                 try:
-                    return json.loads(text[start:i + 1])
+                    return json.loads(chunk)
                 except json.JSONDecodeError:
-                    break
+                    try:
+                        return json.loads(_repair_newlines(chunk))
+                    except json.JSONDecodeError:
+                        break
     sys.exit("Could not parse JSON from model output:\n%s" % text[:600])
 
 
@@ -222,7 +269,7 @@ def run_script(name, args):
         return "could not run %s: %s" % (name, e)
 
 
-def stage_critique(posts):
+def stage_critique(posts, allow_em_dash=False):
     reports = {}
     for platform, entry in posts.items():
         copy = entry.get("copy", "")
@@ -232,7 +279,10 @@ def stage_critique(posts):
         with open(tmp, "w", encoding="utf-8") as f:
             f.write(copy)
         mech = run_script("critique.py", ["--file", tmp, "--platform", platform, "--json"])
-        tells = run_script("humanize_check.py", ["--file", tmp, "--json"])
+        tell_args = ["--file", tmp, "--json"]
+        if allow_em_dash:
+            tell_args.append("--allow-em-dash")
+        tells = run_script("humanize_check.py", tell_args)
         try:
             reports[platform] = {
                 "mechanical": json.loads(mech) if mech.strip() else {},
@@ -296,6 +346,44 @@ your two answers.
     return extract_json(llm(prompt, max_tokens=8000))
 
 
+def stage_repair(posts, reports, brief):
+    """Second-chance rewrite aimed only at surviving hard-rule failures.
+
+    The main rewrite asks the model to apply the whole catalogue, and smaller
+    models reliably drop one or two items. Rather than ship a banned pattern
+    with a soft verdict, hand back the exact residue and ask for a surgical fix.
+    """
+    residue = {p: r["tells"].get("hard_failures", [])
+               for p, r in reports.items()
+               if r.get("tells", {}).get("hard_fail")}
+    if not residue:
+        return posts, []
+
+    prompt = """These posts still contain banned patterns after the humanize pass.
+
+Fix ONLY these. Change nothing else: not the hook, not the facts, not the voice,
+not the length. This is a surgical edit, not a rewrite.
+
+SURVIVING FAILURES BY PLATFORM:
+%s
+
+RULES
+- Em dashes and en dashes must not appear in the final text. Restructure the
+  sentence: a period, a comma, a colon or parentheses. Do NOT swap in a hyphen,
+  because the construction is the tell, not the glyph.
+- Strip any invisible unicode.
+- Invent no new facts. Every number and name must already be in the posts.
+
+POSTS:
+%s
+
+Return the same JSON structure with only those fixes applied.
+""" % (json.dumps(residue, indent=2, ensure_ascii=False),
+       json.dumps(posts, indent=2, ensure_ascii=False))
+
+    return extract_json(llm(prompt, max_tokens=8000)), sorted(residue)
+
+
 def say(n, title, detail="", state="run"):
     """One progress line per stage, on stderr so stdout stays pipeable."""
     if ui is None:
@@ -316,13 +404,16 @@ def show_reports(reports):
             continue
         passed = not mech.get("failing_criteria")
         families = tells.get("cluster_score", 0)
-        clean = families <= 2
+        hard = tells.get("hard_fail")
+        clean = families <= 2 and not hard
         sys.stderr.write("      %s %s  %s  %s\n" % (
             ui.c(platform.ljust(10), ui.INK),
             ui.c(("✓ " if passed else "✗ ") + mv,
                  ui.GOOD if passed else ui.WARN),
             ui.c("·", ui.FAINT),
-            ui.c("%d tell famil%s" % (families, "y" if families == 1 else "ies"),
+            ui.c("%d tell famil%s%s" % (
+                families, "y" if families == 1 else "ies",
+                "  HARD: " + ", ".join(tells.get("hard_failures", [])) if hard else ""),
                  ui.GOOD if clean else ui.BAD)))
     sys.stderr.flush()
 
@@ -345,6 +436,11 @@ def main():
     source = sys.stdin.read() if args.source == "-" else open(
         args.source, encoding="utf-8").read()
     voice = open(args.voice, encoding="utf-8").read() if args.voice else ""
+    # The catalogue says a real writing sample outranks the dash ban, so honour
+    # the voice profile rather than flagging an author's own habit.
+    allow_em_dash = bool(re.search(r"author_uses_em_dashes:\s*true", voice, re.I))
+    if allow_em_dash:
+        say(0, "VOICE", "author uses em dashes, dash rule relaxed", "ok")
 
     if ui is not None:
         sys.stderr.write(ui.banner() + "\n")
@@ -363,16 +459,40 @@ def main():
     say(2, "DRAFT", " · ".join(platforms), "ok")
 
     say(3, "CRITIQUE", "rubric + tell detection")
-    reports = stage_critique(posts)
+    reports = stage_critique(posts, allow_em_dash=allow_em_dash)
     show_reports(reports)
 
     if not args.no_rewrite:
         label = "rewriting" if args.no_humanize else "rewriting + 33-pattern pass"
         say(4, "HUMANIZE", label)
         posts = stage_rewrite(posts, reports, brief, voice, humanize=not args.no_humanize)
-        reports = stage_critique({k: v for k, v in posts.items() if isinstance(v, dict)})
+        reports = stage_critique(
+            {k: v for k, v in posts.items() if isinstance(v, dict)},
+            allow_em_dash=allow_em_dash)
         say(4, "HUMANIZE", "after rewrite", "ok")
         show_reports(reports)
+
+        # Enforcement: a surviving hard rule is a failure, not a warning.
+        for attempt in (1, 2):
+            failing = [p for p, r in reports.items()
+                       if r.get("tells", {}).get("hard_fail")]
+            if not failing:
+                break
+            say(4, "ENFORCE", "banned patterns survived in %s (pass %d)"
+                % (", ".join(failing), attempt), "warn")
+            posts, fixed = stage_repair(posts, reports, brief)
+            reports = stage_critique(
+                {k: v for k, v in posts.items() if isinstance(v, dict)},
+                allow_em_dash=allow_em_dash)
+            show_reports(reports)
+
+        still = [p for p, r in reports.items()
+                 if r.get("tells", {}).get("hard_fail")]
+        if still:
+            say(4, "ENFORCE", "STILL FAILING in %s — shipping flagged, do not "
+                "post without an edit" % ", ".join(still), "fail")
+        else:
+            say(4, "ENFORCE", "no banned patterns remain", "ok")
 
     audit = posts.pop("audit", None)
     pack = {

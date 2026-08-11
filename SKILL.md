@@ -233,7 +233,9 @@ Then the four rules that govern the rewrite:
 Two things that override the defaults:
 
 - **A writing sample outranks every style rule, including the em dash ban.** If `voice_profile.reference_posts` shows the author uses em dashes, keep them at their frequency. Sounding like the author beats scrubbing the tell.
-- **Look for clusters, not isolated hits.** One em dash means nothing. Em dashes plus rule-of-three plus "vibrant tapestry" plus a tidy closing line is a confession. This matters most for quoted material: if a podcast guest actually said "it's not just a tool, it's a mindset", that gets quoted verbatim. The patterns apply to your prose, not to their words.
+- **Look for clusters, not isolated hits — except the hard rules.** For judgement patterns a single hit means nothing; they only convict in combination. This matters most for quoted material: if a podcast guest actually said "it's not just a tool, it's a mindset", that gets quoted verbatim, because the patterns apply to your prose and not to their words. **Dashes and invisible unicode are the exception and fail at any count.** The detector reports them as `hard_fail` with a non-zero exit, and a cluster score of 1 must not be allowed to launder a surviving banned character.
+
+**Enforce, do not report.** After the rewrite, re-run the detector. If a hard rule survived, do a surgical repair pass that fixes only the residue and touches nothing else, then re-check. `forge.py` does this automatically for up to two rounds and flags the pack loudly if anything still fails. Reporting "1 tell family, probably fine" while shipping a banned pattern is the failure mode this stage exists to prevent.
 
 Finish with the **audit pass**, which is the step people skip. After rewriting, ask and briefly answer:
 

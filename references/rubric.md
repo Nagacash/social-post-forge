@@ -68,6 +68,8 @@ Uniform sentence length is the biggest structural tell there is. Models also exp
 
 `scripts/critique.py` checks all of this mechanically. Run it before scoring by hand.
 
+**Dashes and invisible unicode are hard rules, not weighted ones.** A post cannot score above 3 here while a single em or en dash survives, no matter how clean everything else is. `humanize_check.py` reports these as `hard_fail` and exits non-zero, and `forge.py` re-runs a targeted repair rather than shipping them. The only override is a voice profile whose reference posts genuinely use dashes.
+
 ---
 
 ## 5. CTA Clarity and Placement

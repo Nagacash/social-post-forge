@@ -365,7 +365,9 @@ def check_hedge_stacks(text):
 def check_dashes(text, allow_em_dash=False):
     hits = []
     for ch, name in DASHES.items():
-        if allow_em_dash and ch == "—":
+        # The flag means "this author genuinely uses dashes", which covers both
+        # glyphs. Suppressing only the em dash left en dashes failing hard.
+        if allow_em_dash:
             continue
         for m in re.finditer(re.escape(ch), text):
             hits.append({
@@ -410,6 +412,13 @@ def check_invisibles(text):
     return hits
 
 
+# Patterns the rubric fails outright. Cluster counting is the right lens for
+# judgement calls, but a banned character is not a judgement call: it is a
+# formatting failure at any count. Keeping these separate stops one survivor
+# from being averaged away into "probably fine".
+HARD_PATTERNS = {14, "invisible"}
+
+
 def analyse(text, allow_em_dash=False):
     findings = []
     findings += check_dashes(text, allow_em_dash)
@@ -452,7 +461,13 @@ def analyse(text, allow_em_dash=False):
     families = {f.get("pattern") for f in findings}
     cluster = len(families)
 
-    if cluster == 0:
+    hard = [f for f in findings if f.get("pattern") in HARD_PATTERNS]
+    hard_labels = sorted({f["label"] for f in hard})
+
+    if hard:
+        # A single surviving banned character still fails, even at cluster 1.
+        verdict = "hard rule failed (%s) — rewrite" % ", ".join(hard_labels)
+    elif cluster == 0:
         verdict = "clean"
     elif cluster <= 2:
         verdict = "probably fine — isolated hits, check for false positives"
@@ -465,6 +480,8 @@ def analyse(text, allow_em_dash=False):
         "verdict": verdict,
         "cluster_score": cluster,
         "total_findings": len(findings),
+        "hard_fail": bool(hard),
+        "hard_failures": hard_labels,
         "sentence_uniformity": uniformity,
         "findings": findings,
     }
@@ -488,17 +505,23 @@ def main():
         return 0
 
     cluster = report["cluster_score"]
-    clean = cluster == 0
+    hard = report.get("hard_fail")
+    clean = cluster == 0 and not hard
 
     if ui is None:
         print("verdict: %s" % report["verdict"])
         print("pattern families hit: %d   total findings: %d"
               % (cluster, report["total_findings"]))
     else:
-        heat = ui.GOOD if clean else (ui.WARN if cluster <= 2 else
-                                      ui.EMBER[2] if cluster <= 4 else ui.BAD)
+        heat = ui.BAD if hard else (
+            ui.GOOD if clean else (ui.WARN if cluster <= 2 else
+                                   ui.EMBER[2] if cluster <= 4 else ui.BAD))
         print()
-        print(ui.verdict(report["verdict"], ok=cluster <= 2))
+        print(ui.verdict(report["verdict"], ok=(not hard and cluster <= 2)))
+        if hard:
+            print("  " + ui.c(
+                "A banned pattern survived. The rubric fails this on formatting "
+                "regardless of how few families were hit.", ui.BAD))
         # the heat gauge: one block per pattern family, capped at ten
         blocks = min(cluster, 10)
         gauge = ui.c("█" * blocks, heat) + ui.c("░" * (10 - blocks), ui.FAINT)
@@ -559,13 +582,14 @@ def main():
                       else "      %s" % ui.c(more, ui.FAINT))
 
     note = ("Hits inside quotations are legitimate. Look for clusters, not "
-            "isolated instances. Rewrite sentences, not characters.")
+            "isolated instances — except the hard rules, which fail at any "
+            "count. Rewrite sentences, not characters.")
     if ui is None:
         print("\nNote: " + note)
     else:
         print()
         print("  " + ui.c(note, ui.FAINT))
-    return 0
+    return 1 if report.get("hard_fail") else 0
 
 
 if __name__ == "__main__":

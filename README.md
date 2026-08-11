@@ -116,9 +116,11 @@ The insight underneath all 33 patterns, in Wikipedia's words:
 
 > LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases.
 
-`scripts/humanize_check.py` detects the mechanically findable subset — dashes, invisible unicode, the AI vocabulary cluster, negative parallelism, rule-of-three runs, filler, signposting, aphorism formulas, inline-header lists, hedge stacks, staccato runs and sentence-length uniformity. It scores by **pattern families hit**, not raw count, because clusters are what matter and a single em dash is nothing.
+`scripts/humanize_check.py` detects the mechanically findable subset — dashes, invisible unicode, the AI vocabulary cluster, negative parallelism, rule-of-three runs, filler, signposting, aphorism formulas, inline-header lists, hedge stacks, staccato runs and sentence-length uniformity. It scores by **pattern families hit**, not raw count, because most tells only convict in combination.
 
 <img src="assets/detector.svg" alt="humanize_check.py output" width="100%">
+
+**Hard rules vs judgement calls.** Most patterns only convict in combination, so the detector scores by pattern family. But dashes and invisible unicode fail at *any* count — they are not judgement calls, and the rubric fails the post on formatting regardless. Those produce a `hard_fail` verdict and a non-zero exit, and `forge.py` runs a targeted repair pass rather than shipping them with a soft verdict.
 
 Three rules keep the pass honest:
 
