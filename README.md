@@ -39,8 +39,13 @@ The runtime artifact is `SKILL.md` with agentskills.io-compatible YAML frontmatt
 
 ```bash
 hermes skills install https://raw.githubusercontent.com/Nagacash/social-post-forge/main/SKILL.md
-# or clone the full directory to get references and scripts
-git clone https://github.com/Nagacash/social-post-forge ~/.hermes/skills/social-post-forge
+```
+
+Use the installer rather than copying by hand — **the skills directory differs between Hermes deployments** (`~/.hermes/skills/` on some local installs, `/opt/data/skills/` on server and container builds), and dropping the folder in the wrong one leaves it invisible to `skills_list` with no error. If you do want the full repo rather than just `SKILL.md`, confirm the live path first:
+
+```bash
+hermes skills list          # shows where skills are being read from
+git clone https://github.com/Nagacash/social-post-forge <that-path>/social-post-forge
 ```
 
 **Claude Code / Cursor / any skills directory:**
@@ -64,13 +69,26 @@ The skill names Hyperagent tools (`TranscribeAudio`, `ExaSearch`, `GenerateImage
 ```bash
 git clone https://github.com/Nagacash/social-post-forge
 cd social-post-forge
-cp .env.example .env    # add ANTHROPIC_API_KEY
+cp .env.example .env
 python3 scripts/forge.py --source episode.txt --voice voice-profiles/mine.yaml
 ```
 
 No dependencies beyond the Python 3.8+ standard library.
 
-The CLI is deliberately the thinner experience. Critique and trend benchmarking are much stronger with a real agent behind them, because they are reasoning tasks rather than API calls.
+**Any provider works.** Anthropic is the default, but set `FORGE_BASE_URL` and the CLI switches to the OpenAI-compatible `/chat/completions` shape:
+
+```bash
+FORGE_BASE_URL=https://openrouter.ai/api/v1 \
+FORGE_API_KEY=sk-or-... \
+FORGE_MODEL=meta-llama/llama-3.3-70b-instruct \
+python3 scripts/forge.py --source episode.txt
+
+# fully local, no key that matters
+FORGE_BASE_URL=http://localhost:11434/v1 FORGE_API_KEY=x \
+FORGE_MODEL=llama3.1 python3 scripts/forge.py --source episode.txt
+```
+
+The CLI is deliberately the thinner experience: mechanical critique only, and no trend benchmarking, because that stage needs a browsing agent. **If you already run Hermes, Claude Code or Codex, use the skill instead** — the agent drives the stages with real reasoning, needs no key at all, and gets you the critique and benchmark stages the CLI cannot do.
 
 ## Usage
 

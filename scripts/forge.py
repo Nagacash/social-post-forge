@@ -8,8 +8,9 @@ reasoning behind them. This CLI exists so the repo is useful to everyone else.
 
 Pipeline: ingest -> draft -> critique -> humanize -> (benchmark) -> pack
 
-Requires ANTHROPIC_API_KEY. Trend benchmarking needs a web search key and is
-skipped with a warning when absent.
+Works with Anthropic by default, or any OpenAI-compatible endpoint via
+FORGE_BASE_URL (OpenRouter, Nous, Together, Groq, vLLM, Ollama, LM Studio).
+Trend benchmarking needs a browsing agent and is not implemented here.
 
 Usage:
     python3 forge.py --source episode.txt --voice voice-profiles/naga.yaml
@@ -35,8 +36,13 @@ except ImportError:  # ui.py is optional; fall back to plain text
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 
-MODEL = os.environ.get("FORGE_MODEL", "claude-sonnet-4-5-20250929")
-API_URL = "https://api.anthropic.com/v1/messages"
+# Provider config. Defaults to Anthropic, but any OpenAI-compatible endpoint
+# works by setting FORGE_BASE_URL — OpenRouter, Nous, Together, Groq, vLLM,
+# Ollama, LM Studio. The repo should not assume everyone has Anthropic billing.
+BASE_URL = os.environ.get("FORGE_BASE_URL", "").rstrip("/")
+DEFAULT_MODEL = "claude-sonnet-4-5-20250929" if not BASE_URL else "gpt-4o-mini"
+MODEL = os.environ.get("FORGE_MODEL", DEFAULT_MODEL)
+ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
 
 ALL_PLATFORMS = ["linkedin", "instagram", "x", "tiktok"]
 
@@ -51,34 +57,52 @@ def read_ref(name):
 
 
 def llm(prompt, system=None, max_tokens=4000):
-    key = os.environ.get("ANTHROPIC_API_KEY")
-    if not key:
-        sys.exit("ANTHROPIC_API_KEY is not set. See .env.example.")
+    """Call the configured provider. OpenAI-compatible when FORGE_BASE_URL is set."""
+    if BASE_URL:
+        key = (os.environ.get("FORGE_API_KEY")
+               or os.environ.get("OPENAI_API_KEY") or "")
+        if not key:
+            sys.exit("FORGE_BASE_URL is set but FORGE_API_KEY is not. "
+                     "Use a dummy value for local servers that ignore auth "
+                     "(Ollama, LM Studio, vLLM). See .env.example.")
+        url = BASE_URL + "/chat/completions"
+        messages = ([{"role": "system", "content": system}] if system else [])
+        messages.append({"role": "user", "content": prompt})
+        payload = {"model": MODEL, "max_tokens": max_tokens, "messages": messages}
+        headers = {"Authorization": "Bearer " + key,
+                   "content-type": "application/json"}
+    else:
+        key = os.environ.get("ANTHROPIC_API_KEY")
+        if not key:
+            sys.exit("No provider configured. Set ANTHROPIC_API_KEY, or set "
+                     "FORGE_BASE_URL + FORGE_API_KEY for any OpenAI-compatible "
+                     "endpoint. See .env.example.")
+        url = ANTHROPIC_URL
+        payload = {"model": MODEL, "max_tokens": max_tokens,
+                   "messages": [{"role": "user", "content": prompt}]}
+        if system:
+            payload["system"] = system
+        headers = {"x-api-key": key, "anthropic-version": "2023-06-01",
+                   "content-type": "application/json"}
 
-    payload = {
-        "model": MODEL,
-        "max_tokens": max_tokens,
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    if system:
-        payload["system"] = system
-
-    req = urllib.request.Request(
-        API_URL,
-        data=json.dumps(payload).encode(),
-        headers={
-            "x-api-key": key,
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json",
-        },
-        method="POST",
-    )
+    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
+                                 headers=headers, method="POST")
     try:
         with urllib.request.urlopen(req, timeout=180) as r:
             body = json.loads(r.read().decode())
-        return "".join(b.get("text", "") for b in body.get("content", []))
     except urllib.error.HTTPError as e:
-        sys.exit("Anthropic API %d: %s" % (e.code, e.read().decode("utf-8", "replace")[:400]))
+        sys.exit("%s %d: %s" % (url, e.code,
+                                e.read().decode("utf-8", "replace")[:400]))
+    except urllib.error.URLError as e:
+        sys.exit("Cannot reach %s (%s)" % (url, e.reason))
+
+    if BASE_URL:
+        try:
+            return body["choices"][0]["message"]["content"]
+        except (KeyError, IndexError):
+            sys.exit("Unexpected response shape from %s:\n%s"
+                     % (url, json.dumps(body)[:400]))
+    return "".join(b.get("text", "") for b in body.get("content", []))
 
 
 def extract_json(text):

@@ -55,13 +55,13 @@ Two rules when a capability is missing:
 
 ### Install
 
-Hermes Agent:
+Hermes Agent — use the installer, which resolves the correct directory:
 
 ```bash
 hermes skills install https://raw.githubusercontent.com/Nagacash/social-post-forge/main/SKILL.md
-# or clone the whole directory for the references and scripts
-git clone https://github.com/Nagacash/social-post-forge ~/.hermes/skills/social-post-forge
 ```
+
+The skills directory differs between Hermes deployments (`~/.hermes/skills/` on some local installs, `/opt/data/skills/` on server and container builds). Copying the folder into the wrong one leaves it invisible to `skills_list` with no error, so run `hermes skills list` to confirm the live path before cloning the full repo there.
 
 Claude Code, Cursor, or any harness with a skills directory:
 
